@@ -14,6 +14,7 @@ const SignUp = () => {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingFb, setLoadingFb] = useState(false);
   const [isPasswordShow, setIsPasswordShow] = useState(false);
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -27,7 +28,7 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ email, password });
+    console.log({ name, email, password });
   };
 
   return (
@@ -61,9 +62,8 @@ const SignUp = () => {
         </div>
 
         <h1 className='text-center text-3xl font-extrabold'>
-          Welcome Back!
+          Join us today! Get special benefits and stay up-to-date
         </h1>
-        <p className='text-center text-gray-500 mt-2'>Sign in with your credentials.</p>
 
         <div className='flex items-center justify-center w-full mt-6 gap-4'>
           <LoadingButton
@@ -87,11 +87,17 @@ const SignUp = () => {
 
         <div className='flex w-full items-center justify-center gap-3 my-6'>
           <span className='flex-grow h-[1px] bg-gray-200'></span>
-          <span className='text-sm font-medium text-gray-500'>Or, Sign In With Email</span>
+          <span className='text-sm font-medium text-gray-500'>Or, Sign In With Your Email</span>
           <span className='flex-grow h-[1px] bg-gray-200'></span>
         </div>
 
         <form onSubmit={handleSubmit}>
+          <div className='form-group mb-4 w-full'>
+            <label className='text-sm font-medium mb-1 block' htmlFor="name">Full Name</label>
+            <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)}
+            className='w-full h-12 border border-gray-200 rounded-md focus:border-gray-400 focus:outline-none px-3' required/>
+          </div>
+
           <div className='form-group mb-4 w-full'>
             <label className='text-sm font-medium mb-1 block' htmlFor="email">Email Address</label>
             <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)}
@@ -120,14 +126,8 @@ const SignUp = () => {
             </Link>
           </div>
 
-          <Button type="submit" variant="contained" className='!bg-black !text-white !py-3 !text-base !font-bold w-full !normal-case'>Sign In</Button>
+          <Button type="submit" variant="contained" className='!bg-blue-600 !text-white !py-3 !text-base !font-bold w-full !normal-case'>Sign In</Button>
         </form>
-         <p className="mt-6 text-gray-600 text-center text-sm">
-          Don’t have an account?{" "}
-          <Link to="/signup" className="text-blue-600 font-semibold">
-            Sign Up
-          </Link>
-        </p>
       </div>
     </section>
   );

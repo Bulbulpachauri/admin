@@ -78,7 +78,7 @@ const Dashboard = () => {
       TotalUses: 2400,
       amt: 2400,
     },
-    {
+    { 
       name: 'FEB',
       TotalSales: 3000,
       TotalUses: 1398,

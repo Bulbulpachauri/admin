@@ -10,7 +10,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { FaRegEye, FaEyeSlash } from 'react-icons/fa';
 
-const LogIn = () => {
+const Login = () => {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingFb, setLoadingFb] = useState(false);
   const [isPasswordShow, setIsPasswordShow] = useState(false);
@@ -63,7 +63,7 @@ const LogIn = () => {
         <h1 className='text-center text-3xl font-extrabold'>
           Welcome Back!
         </h1>
-        <p className='text-center text-gray-500 mt-2'>Sign in with your credentials.</p>
+        {/* <p className='text-center text-gray-500 mt-2'>Sign in with your credentials.</p> */}
 
         <div className='flex items-center justify-center w-full mt-6 gap-4'>
           <LoadingButton
@@ -87,7 +87,7 @@ const LogIn = () => {
 
         <div className='flex w-full items-center justify-center gap-3 my-6'>
           <span className='flex-grow h-[1px] bg-gray-200'></span>
-          <span className='text-sm font-medium text-gray-500'>Or, Sign In With Email</span>
+          <span className='text-sm font-medium text-gray-500'>Or, Sign In With Your Email</span>
           <span className='flex-grow h-[1px] bg-gray-200'></span>
         </div>
 
@@ -120,17 +120,11 @@ const LogIn = () => {
             </Link>
           </div>
 
-          <Button type="submit" variant="contained" className='!bg-black !text-white !py-3 !text-base !font-bold w-full !normal-case'>Sign In</Button>
+          <Button type="submit" variant="contained" className='!bg-blue-600 !text-white !py-3 !text-base !font-bold w-full !normal-case'>Log In</Button>
         </form>
-         <p className="mt-6 text-gray-600 text-center text-sm">
-          Don’t have an account?{" "}
-          <Link to="/signup" className="text-blue-600 font-semibold">
-            Sign Up
-          </Link>
-        </p>
       </div>
     </section>
   );
 };
 
-export default LogIn;
+export default Login;
