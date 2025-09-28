@@ -167,9 +167,11 @@ const Dashboard = () => {
           <h1 className="text-[30px] font-[600]">Good Morning,<br /> Cameron</h1>
           <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Numquam et tempore dolorum.</p>
           <br />
-          <Button className="btn-blue !capitalize" startIcon={<FaPlus />}>
-            New Product
-          </Button>
+          <Link to="/products">
+            <Button className="btn-blue !capitalize" startIcon={<FaPlus />}>
+              New Product
+            </Button>
+          </Link>
         </div>
 
         <img src="https://img.freepik.com/premium-vector/online-shopping-e-commerce-flat-design-illustration_510308-196.jpg" className="w-[250px]" />
@@ -205,7 +207,10 @@ const Dashboard = () => {
 
           <div className="col w-[25%] ml-auto flex items-center gap-3">
             <Button className="btn !bg-green-600 !text-white btn-sm">Export</Button>
-            <Button className="btn-blue !text-white btn-sm">Add Product</Button>
+            
+            <Link to="/products">
+              <Button className="btn-blue !text-white btn-sm">Add Product</Button>
+            </Link>
           </div>
         </div>
 
@@ -760,7 +765,9 @@ const Dashboard = () => {
 
           <div className="col w-[25%] ml-auto flex items-center gap-3">
             <Button className="btn !bg-green-600 !text-white btn-sm">Export</Button>
-            <Button className="btn-blue !text-white btn-sm">Add Product</Button>
+            <Link to="/products">
+              <Button className="btn-blue !text-white btn-sm">Add Product</Button>
+            </Link>
           </div>
         </div>
 

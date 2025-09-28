@@ -6,12 +6,12 @@ import Select from '@mui/material/Select';
 import Rating from '@mui/material/Rating';
 import UploadBox from "../../Components/UploadBox";
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-
+import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from '@mui/material/Button';
 import { IoMdClose } from "react-icons/io";
 
 
-const AddProduct = () => {
+const AddCategory = () => {
   
   const [productCat, setProductCat] = useState('');
   const [productSubCat, setProductSubCat] = useState('');
@@ -47,7 +47,7 @@ const AddProduct = () => {
   return (
     <section className="p-5 bg-gray-50">
       <form className="form py-3 p-8">
-        <div className="scroll overflow-y-auto">
+        <div className="scroll mx-h-[72vh] overflow-y-scroll pr-4">
         <div className="grid grid-cols-1 text-black mb-3">
           <div className="col">
             <h3 className="text-[14px] font-[500] mb-1">Product Name</h3>
@@ -229,7 +229,55 @@ const AddProduct = () => {
 
           <div className="grid grid-cols-7 gap-4">
             <div className="uploadBoxWrapper relative">
-              <span className="absolute w-[20px] h-[20px] rounded-full overflow-hidden bg-red-700 -top-[5px] -right-[5px] flex items-center justify-center z-50 cursor-pointer"><IoMdClose className="text-white text-[17px]" /></span>
+              <span className="absolute w-[20px] h-[20px] rounded-full overflow-hidden bg-red-700 -top-[5px] 
+              -right-[5px] flex items-center justify-center z-50 cursor-pointer">
+                <IoMdClose className="text-white text-[17px]" /></span>
+
+              <div className='uploadBox p-3 rounded-md overflow-hidden border border-dashed border-[rgba(0,0,0,0.3)] h-[250px] w-[100%] bg-gray-100 cursor-pointer hover:bg-gray-200 flex items-center justify-center flex-col relative'>
+                <LazyLoadImage
+                  alt={"product-image"}
+                  effect="blur"
+                  className="w-full h-full object-cover"
+                  src={"https://ecme-react.themenate.net/img/products/product-1.jpg"}
+                /> 
+              </div>
+            </div>
+
+              <div className="uploadBoxWrapper relative">
+              <span className="absolute w-[20px] h-[20px] rounded-full overflow-hidden bg-red-700 -top-[5px] 
+              -right-[5px] flex items-center justify-center z-50 cursor-pointer">
+                <IoMdClose className="text-white text-[17px]" /></span>
+
+              <div className='uploadBox p-3 rounded-md overflow-hidden border border-dashed border-[rgba(0,0,0,0.3)] h-[250px] w-[100%] bg-gray-100 cursor-pointer hover:bg-gray-200 flex items-center justify-center flex-col relative'>
+                <LazyLoadImage
+                  alt={"product-image"}
+                  effect="blur"
+                  className="w-full h-full object-cover"
+                  src={"https://ecme-react.themenate.net/img/products/product-1.jpg"}
+                /> 
+              </div>
+            </div>
+
+              <div className="uploadBoxWrapper relative">
+              <span className="absolute w-[20px] h-[20px] rounded-full overflow-hidden bg-red-700 -top-[5px] 
+              -right-[5px] flex items-center justify-center z-50 cursor-pointer">
+                <IoMdClose className="text-white text-[17px]" /></span>
+
+              <div className='uploadBox p-3 rounded-md overflow-hidden border border-dashed border-[rgba(0,0,0,0.3)] h-[250px] w-[100%] bg-gray-100 cursor-pointer hover:bg-gray-200 flex items-center justify-center flex-col relative'>
+                <LazyLoadImage
+                  alt={"product-image"}
+                  effect="blur"
+                  className="w-full h-full object-cover"
+                  src={"https://ecme-react.themenate.net/img/products/product-1.jpg"}
+                /> 
+              </div>
+            </div>
+
+              <div className="uploadBoxWrapper relative">
+              <span className="absolute w-[20px] h-[20px] rounded-full overflow-hidden bg-red-700 -top-[5px] 
+              -right-[5px] flex items-center justify-center z-50 cursor-pointer">
+                <IoMdClose className="text-white text-[17px]" /></span>
+
               <div className='uploadBox p-3 rounded-md overflow-hidden border border-dashed border-[rgba(0,0,0,0.3)] h-[250px] w-[100%] bg-gray-100 cursor-pointer hover:bg-gray-200 flex items-center justify-center flex-col relative'>
                 <LazyLoadImage
                   alt={"product-image"}
@@ -241,13 +289,17 @@ const AddProduct = () => {
             </div>
             <UploadBox multiple={true} />
           </div>
+          
 
         </div>
         </div>
 
+
+        <hr/>
         <br/>
-
-        <Button type="button" className="btn-blue btn-lg">Publish and View</Button>
+        <Button type="button" className="btn-blue btn-lg w-full flex gap-4">
+          <span><FaCloudUploadAlt className="text-[25px] text-white"/></span>
+          Publish and View</Button>
 
 
       </form>
@@ -255,4 +307,4 @@ const AddProduct = () => {
   );
 };
 
-export default AddProduct;
+export default AddCategory;

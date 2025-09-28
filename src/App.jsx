@@ -18,6 +18,12 @@ import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
 import { IoMdClose } from 'react-icons/io';
 import Slide from '@mui/material/Slide';
+import HomeSliderBanners from './Pages/HomeSliderBanners';
+import AddHomeSlider from './Pages/HomeSliderBanners/addHomeSlider';
+import CategoryList from './Pages/Categegory';
+import AddCategory from './Pages/Categegory/addCategory';
+
+
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -96,7 +102,140 @@ function App() {
           </section>
         </>
       ),
-    }
+    },
+    {
+      path: '/homeSlider/list',
+      exact:true,
+      element:(
+        <>
+          <section className='main'>
+            <Header/>
+            <div className="contentMain flex">
+              <div className={`overflow-hidden sidebarWrapper ${isSidebarOpen===true ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+                <Sidebar/>
+              </div>
+              <div className={`contentRight py-4 px-5 ${isSidebarOpen===false ? 'w-[80%]' : 'w-[82%]'}`}>
+                <HomeSliderBanners />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
+     {
+      path: '/category/list',
+      exact:true,
+      element:(
+        <>
+          <section className='main'>
+            <Header/>
+            <div className="contentMain flex">
+              <div className={`overflow-hidden sidebarWrapper ${isSidebarOpen===true ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+                <Sidebar/>
+              </div>
+              <div className={`contentRight py-4 px-5 ${isSidebarOpen===false ? 'w-[80%]' : 'w-[82%]'}`}>
+                <CategoryList />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
+    {
+      path: '/product/upload',
+      exact:true,
+      element:(
+        <>
+          <section className='main'>
+            <Header/>
+            <div className="contentMain flex">
+              <div className={`overflow-hidden sidebarWrapper ${isSidebarOpen===true ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+                <Sidebar/>
+              </div>
+              <div className={`contentRight py-4 px-5 ${isSidebarOpen===false ? 'w-[80%]' : 'w-[82%]'}`}>
+                <AddProduct />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
+    {
+      path: '/home-slider',
+      exact:true,
+      element:(
+        <>
+          <section className='main'>
+            <Header/>
+            <div className="contentMain flex">
+              <div className={`overflow-hidden sidebarWrapper ${isSidebarOpen===true ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+                <Sidebar/>
+              </div>
+              <div className={`contentRight py-4 px-5 ${isSidebarOpen===false ? 'w-[80%]' : 'w-[82%]'}`}>
+                <HomeSliderBanners />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
+    {
+      path: '/categories',
+      exact:true,
+      element:(
+        <>
+          <section className='main'>
+            <Header/>
+            <div className="contentMain flex">
+              <div className={`overflow-hidden sidebarWrapper ${isSidebarOpen===true ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+                <Sidebar/>
+              </div>
+              <div className={`contentRight py-4 px-5 ${isSidebarOpen===false ? 'w-[80%]' : 'w-[82%]'}`}>
+                <CategoryList />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
+    {
+      path: '/product/:id/edit',
+      exact:true,
+      element:(
+        <>
+          <section className='main'>
+            <Header/>
+            <div className="contentMain flex">
+              <div className={`overflow-hidden sidebarWrapper ${isSidebarOpen===true ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+                <Sidebar/>
+              </div>
+              <div className={`contentRight py-4 px-5 ${isSidebarOpen===false ? 'w-[80%]' : 'w-[82%]'}`}>
+                <AddProduct />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
+    {
+      path: '/home-slider/add',
+      exact:true,
+      element:(
+        <>
+          <section className='main'>
+            <Header/>
+            <div className="contentMain flex">
+              <div className={`overflow-hidden sidebarWrapper ${isSidebarOpen===true ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+                <Sidebar/>
+              </div>
+              <div className={`contentRight py-4 px-5 ${isSidebarOpen===false ? 'w-[80%]' : 'w-[82%]'}`}>
+                <AddHomeSlider />
+              </div>
+            </div>
+          </section>
+        </>
+      ),
+    },
   ]);
 
   const values = {
@@ -142,9 +281,19 @@ function App() {
 
         {
           isOpenFullScreenPanel?.model==='Add Product' && 
-            <AddProduct /> }
+            <AddProduct />     
+            }
 
-        
+            {
+              isOpenFullScreenPanel?.model==='Add Home Slide' && 
+              <AddHomeSlider />     
+            }
+
+            {
+              isOpenFullScreenPanel?.model==='Add New Category' && 
+              <AddCategory />     
+            }
+            
       </Dialog>
 
     </MyContext.Provider>
@@ -152,3 +301,4 @@ function App() {
 };
 
 export default App;
+export {MyContext};

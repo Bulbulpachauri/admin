@@ -32,20 +32,20 @@ const createData = (productName, productImg, productCat, category, subCategory, 
 }
 
 const rows = [
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
-  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734524878924_1721277298204_banner.jpg", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
+  createData("A-Line Kurti Sharare & Dupatta", "https://api.spicezgold.com/download/file_1734525239704_foot.png", "Books", "Electronic",),
 ];
 
 
-const HomeSliderBanners = () => {
+const CategoryList = () => {
   const [categoryFilterVal, setCategoryFilterVal] = useState("");
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -70,16 +70,16 @@ const HomeSliderBanners = () => {
 
       <div className="flex items-center justify-between px-5 py-5">
         <h2 className="text-[18px] font-[600]">
-          Home Slider Banners
+          Category List
           <span className="font-[400] text-[14px] ">(Material Ui Table)</span>
         </h2>
 
-        <div className="col w-[25%] flex items-center justify-end gap-3">
+        <div className="col w-[30%] flex items-center justify-end gap-3">
           <Button className="btn !bg-green-600 !text-white btn-sm">Export</Button>
           <Button className="btn-blue !text-white btn-sm" onClick={()=>context.setIsOpenFullScreenPanel({
             open:true,
-            model:"Add Home Slide",
-          })}> Add Home Slide</Button>
+            model:"Add New Category",
+          })}> Add New Category</Button>
         </div>
 
       </div>
@@ -142,10 +142,10 @@ const HomeSliderBanners = () => {
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-4">
-                          <div className="img w-[200px] h-[65px] rounded-md overflow-hidden group">
+                          <div className="img w-[65px] h-[65px] rounded-full overflow-hidden group">
                             <Link to="/product/45745">
                               <img src={row.productImg}
-                                className="w-full group-hover:scale-105 transition-all" />
+                                className="w-full h-full object-cover group-hover:scale-105 transition-all" />
                             </Link>
                           </div>
                           <div className="info">
@@ -180,6 +180,7 @@ const HomeSliderBanners = () => {
                       </TableCell>
 
                     </TableRow>
+                    
                   );
                 })}
               </TableBody>
@@ -200,4 +201,4 @@ const HomeSliderBanners = () => {
   );
 };
 
-export default HomeSliderBanners;
+export default CategoryList;
