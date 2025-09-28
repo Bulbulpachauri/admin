@@ -11,6 +11,19 @@ const AddCategory = () => {
     <section className="p-5 bg-gray-50">
       <form className="form py-3 p-8">
         <div className="scroll mx-h-[72vh] overflow-y-scroll pr-4">
+           <div className="grid grid-cols-1 text-black mb-3">
+          <div className="col w-[25%]">
+            <h3 className="text-[14px] font-[500] mb-1">Categegory Name</h3>
+            <input type="text" className="w-full h-[40px] border border-[rgba(0,0,0,0.2)]focus:outline-none
+             focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" />
+          </div>
+        </div>
+
+        <br/>
+
+            <h3 className="text-[18px] font-[500] mb-1 text-black">Categegory Name
+            </h3>
+            <br/>
 
           <div className="grid grid-cols-7 gap-4">
             <div className="uploadBoxWrapper relative">

@@ -10,7 +10,6 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from '@mui/material/Button';
 import { IoMdClose } from "react-icons/io";
 
-
 const AddCategory = () => {
   
   const [productCat, setProductCat] = useState('');
