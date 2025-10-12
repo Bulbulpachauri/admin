@@ -6,7 +6,6 @@ import { IoMdEyeOff } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { MyContext } from "../../App";
-import toast, { Toaster } from "react-hot-toast";
 
 const Register = () => {
 
