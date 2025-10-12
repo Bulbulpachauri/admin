@@ -1,4 +1,5 @@
 import axios from 'axios';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 
 export const postData = async (URL, formData) => {
@@ -13,13 +14,18 @@ export const postData = async (URL, formData) => {
             body: JSON.stringify(formData)
         });
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+
+        if (response.ok) {
+            const data = await response.json();
+            //console.log(data)
+            return { data };
+        } else {
+            const errorData = await response.json();
+            return errorData;
         }
 
-        const data = await response.json();
-        return { data };
     } catch (error) {
-        console.error("Error:", error);}
-}
+        console.error("Error:", error);
+    }
 
+}
