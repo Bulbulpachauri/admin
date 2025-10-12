@@ -77,7 +77,8 @@ function App() {
     openCartPanel,
     openAlertBox,
     isLogin,
-    setIsLogin
+    setIsLogin,
+    alerBox
   };
 
   return (
