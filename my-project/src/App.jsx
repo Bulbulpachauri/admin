@@ -48,6 +48,16 @@ function App() {
   };
 
 
+  const alerBox = (msg, type) =>{
+    if(type === "success"){
+      toast.success(msg);
+    }
+    if(type === "error"){
+      toast.error(msg);
+    }
+  }
+
+
   const openAlertBox = (status, msg) => {
     
     if (status === "success") {
