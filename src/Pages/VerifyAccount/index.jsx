@@ -1,10 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { CgLogIn } from "react-icons/cg";
 import { FaRegUser } from 'react-icons/fa6';
+import OtpBox from '../../Components/OtpBox';
 
 const VerifyAccount = () => {
+  const navigate = useNavigate();
+  const [otp, setOtp] = useState('');
+
+  const handleOtpSubmit = (otpValue) => {
+    // Simulate OTP verification (replace with actual API call)
+    if (otpValue === '123456') {
+      alert('OTP Verified Successfully!');
+      // navigate('/dashboard'); // Redirect to dashboard
+    } else {
+      alert('Invalid OTP. Please try again.');
+    }
+  };
+
+  const handleVerifyClick = () => {
+    handleOtpSubmit(otp);
+  };
+
   return (
     <section className="bg-white w-full h-[100vh]">
       <header className='w-full fixed top-0 left-0 px-4 py-3 flex items-center justify-between z-50 bg-white border-b'>
@@ -32,7 +50,7 @@ const VerifyAccount = () => {
 
       <div className='w-full max-w-md mx-auto pt-32 pb-20 relative z-40'>
         <div className='flex justify-center mb-4'>
-          <img src="/icon.png" className='w-16 h-16' alt="icon" />
+          <img src="/verify.2.png" className="w-[100px] m-auto" />
         </div>
 
         <h1 className='text-center text-3xl font-extrabold'>
@@ -42,11 +60,22 @@ const VerifyAccount = () => {
         </h1>
 
         <br />
-        <p className='text-center text-[15px]'>OTP send to
+        <p className='text-center text-[15px]'>OTP send to &nbsp;
           <span className='text-blue-600 font-bold'> bulbulpachauri21@gmail.com</span>
         </p>
 
         <br />
+
+
+        <div className="text-center flex item-center justify-center flex-col">
+          <OtpBox onSubmit={setOtp} />
+        </div>
+
+        <br/>
+
+        <div className="w-[300px] m-auto">
+          <Button className='btn-blue w-full' onClick={handleVerifyClick}> Verify OTP</Button>
+        </div>
         
 
       </div>

@@ -10,7 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Checkbox from "@mui/material/Checkbox";
 import SearchBox from '../../Components/SearchBox';
 import { MyContext } from '../../context/MyContext';
-import {MdOutlineMarkEmailRead, MdPhone} from 'react-icons/md'
+import {MdOutlineMarkEmailRead, MdPhone, MdCalendarToday} from 'react-icons/md'
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -27,22 +27,27 @@ const columns = [
     label: 'USER PHONE NO',
     minWidth: 100,
   },
+    {
+    id: 'createdDate',
+    label: 'CREATED',
+    minWidth: 100,
+  },
 ];
 
 // Sample data - in a real app, this would come from an API
-const createData = (userImg, userName, userEmail, userPhone) => {
-  return { userImg, userName, userEmail, userPhone };
+const createData = (userImg, userName, userEmail, userPhone, createdDate) => {
+  return { userImg, userName, userEmail, userPhone, createdDate };
 }
 
 const rows = [
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923'),
+  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-23'),
+  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-24'),
+  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-25'),
+  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-26'),
+  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-27'),
+  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-28'),
+  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-29'),
+  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-30'),
 ];
 
 
@@ -128,6 +133,12 @@ const Users = () => {
                         <div className="flex items-center gap-2">
                           <MdPhone className="text-primary" />
                           {row.userPhone}
+                        </div>
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <MdCalendarToday className="text-primary" />
+                          {row.createdDate}
                         </div>
                       </TableCell>
                      

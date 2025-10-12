@@ -28,6 +28,7 @@ import Users from './Pages/Users';
 import Order from './Pages/Orders';
 import ForgotPassword from './Pages/ForgotPassword';
 import VerifyAccount from './Pages/VerifyAccount/index.jsx';
+import ChangePassword from './Pages/ChangePassword';
 
 
 
@@ -74,6 +75,15 @@ function App() {
     },
     {
       path: '/Login',
+      exact:true,
+      element:(
+        <>
+        <Login />
+        </>
+      ),
+    },
+    {
+      path: '/sign-in',
       exact:true,
       element:(
         <>
@@ -295,6 +305,15 @@ function App() {
       element:(
         <>
         <VerifyAccount />
+        </>
+      ),
+    },
+    {
+      path: '/change-password',
+      exact:true,
+      element:(
+        <>
+        <ChangePassword />
         </>
       ),
     },

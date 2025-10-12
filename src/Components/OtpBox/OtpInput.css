@@ -1,0 +1,35 @@
+/* Basic styles for OTP input component. Adjust as needed. */
+
+.otp-container {
+  display: flex;
+  gap: 10px;
+}
+
+.otp-input {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 20px;
+  border: 1px solid #d1d5db; /* gray-300 */
+  border-radius: 6px;
+  outline: none;
+}
+
+.otp-input:focus {
+  border-color: #3b82f6; /* blue-500 */
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.otp-submit-btn {
+  margin-top: 20px;
+  background: #111827; /* gray-900 */
+  color: white;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.otp-submit-btn:hover {
+  background: #1f2937; /* gray-800 */
+}
