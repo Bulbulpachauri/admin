@@ -19,15 +19,12 @@ import Register from "./Pages/Register/index.jsx";
 import CartPage from "./Pages/Cart/index.jsx";
 import Verify from "./Pages/Verify/index.jsx";
 import ForgotPassword from "./Pages/ForgotPassword/index.jsx"
-
-import toast, { Toaster } from 'react-hot-toast';
 import MyList from "./Pages/MyList/index.jsx";
 import Checkout from "./Pages/Checkout/index.jsx";
 import MyAccount from "./Pages/MyAccount/index.jsx";
 import Orders from "./Pages/Orders/index.jsx";
 
-
-
+import toast, { Toaster } from 'react-hot-toast';
 
 const MyContext = createContext();
 
