@@ -31,6 +31,12 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (formFields.name === "") {
+      context.alertBox("error", "Please enter your full name");
+      return false
+    }
+    
   }
 
 
