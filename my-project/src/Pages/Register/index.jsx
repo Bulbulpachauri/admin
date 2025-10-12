@@ -74,18 +74,6 @@ const Register = () => {
               />
             </div>
 
-            <div className="form-group w-full mb-5">
-              <TextField
-                type="tel"
-                id="phone"
-                name="phone"
-                label="Phone Number"
-                variant="outlined"
-                className="w-full"
-                onChange={onChangeInput}
-              />
-            </div>
-
             <div className="form-group w-full mb-5 relative">
               <TextField
                 type={isPasswordShow === false ? "password" : "text"}
