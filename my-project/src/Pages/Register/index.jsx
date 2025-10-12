@@ -6,8 +6,7 @@ import { IoMdEyeOff } from "react-icons/io";
 import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { MyContext } from "../../App";
-import axios from "axios";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const Register = () => {
 
@@ -32,39 +31,9 @@ const Register = () => {
   };
 
   const handleSubmit = (e) => {
-
     e.preventDefault();
-    
-
-    if (formFields.name === "") {
-      context.openAlertBox("error", "Please enter full name");
-      return false
-    }
-
-    if (formFields.email === "") {
-      context.openAlertBox("error", "Please enter email id");
-      return false
-    }
-
-    if (formFields.password === "") {
-      context.openAlertBox("error", "Please enter password");
-      return false
-    }
-
-    if (formFields.phone === "") {
-      context.openAlertBox("error", "Please enter phone number");
-      return false
-    }
-
-    axios.post("http://localhost:8000/api/user/register", formFields).then((res)=>{
-      console.log(res)
-      context.openAlertBox("success", "Registration successful! Please check your email for verification.")
-    }).catch((error)=>{
-      console.error(error)
-      const errorMessage = error.response?.data?.message || "Registration failed"
-      context.openAlertBox("error", errorMessage)
-    })
   }
+
 
   return (
     <section className="section py-10">
