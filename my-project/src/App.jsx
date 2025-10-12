@@ -93,7 +93,6 @@ function App() {
         </MyContext.Provider>
       </BrowserRouter>
 
-      <Toaster />
 
       <Dialog
         open={openProductDetailModal}
@@ -122,6 +121,10 @@ function App() {
           </div>
         </DialogContent>
       </Dialog>
+
+
+
+      <Toaster />
 
 
     </>
