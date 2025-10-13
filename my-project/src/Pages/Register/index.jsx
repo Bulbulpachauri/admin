@@ -29,14 +29,33 @@ const Register = () => {
     });
   };
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    
     if (formFields.name === "") {
       context.alertBox("error", "Please enter your full name");
       return false
     }
     
+        if (formFields.email === "") {
+      context.alertBox("error", "Please enter your email");
+      return false
+    }
+
+        if (formFields.password === "") {
+      context.alertBox("error", "Please enter your password");
+      return false
+    }
+
+
+    postData("/api/user/register").then((res)=>{
+      console.log(res)
+    })
+
+
+
   }
 
 
