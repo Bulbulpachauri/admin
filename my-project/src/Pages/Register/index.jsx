@@ -24,11 +24,11 @@ const Register = () => {
 
   const onChangeInput = (e) => {
     let { name, value } = e.target;
-    setFormsFields(() =>{
-      return{
-      ...formFields,
-      [name]: value
-    }
+    setFormsFields(() => {
+      return {
+        ...formFields,
+        [name]: value
+      }
     });
   };
 
@@ -40,30 +40,38 @@ const Register = () => {
 
     setIsLoading(true);
 
-    
+
     if (formFields.name === "") {
       context.alertBox("error", "Please enter your full name");
       return false
     }
-    
-        if (formFields.email === "") {
+
+    if (formFields.email === "") {
       context.alertBox("error", "Please enter your email");
       return false
     }
 
-        if (formFields.password === "") {
+    if (formFields.password === "") {
       context.alertBox("error", "Please enter your password");
       return false
     }
 
 
-    postData("/api/user/register", formFields).then((res)=>{
-      setIsLoading(false);
-      setFormsFields({
-        name:"",
-        email:"",
-        password:""
-      })
+    postData("/api/user/register", formFields).then((res) => {
+      console.log(res);
+
+      if (res?.error !== true) {
+
+        setIsLoading(false);
+        setFormsFields({
+          name: "",
+          email: "",
+          password: ""
+        })
+      }else{
+        context.alertBox("error", res.message);
+      }
+
     })
 
 
@@ -86,6 +94,8 @@ const Register = () => {
                 id="name"
                 name="name"
                 label="Full Name"
+                value={formFields.name}
+                disabled={isLoading === true ? true : false}
                 variant="outlined"
                 className="w-full"
                 onChange={onChangeInput}
@@ -99,6 +109,8 @@ const Register = () => {
                 id="email"
                 name="email"
                 label="Email Id"
+                value={formFields.email}
+                disabled={isLoading === true ? true : false}
                 variant="outlined"
                 className="w-full"
                 onChange={onChangeInput}
@@ -113,12 +125,14 @@ const Register = () => {
                 label="Password"
                 variant="outlined"
                 className="w-full"
+                value={formFields.password}
+                disabled={isLoading === true ? true : false}
                 onChange={onChangeInput}
               />
               <Button className="!absolute top-[10px] right-[10px] z-50 !w-[35px] !h-[35px] 
               !min-w-[35px] !rounded-full !text-black" onClick={() => {
-                setIsPasswordShow(!isPasswordShow)
-              }}>
+                  setIsPasswordShow(!isPasswordShow)
+                }}>
                 {
                   isPasswordShow === false ? <IoMdEye className="text-[20px] opacity-75" /> :
                     <IoMdEyeOff className="text-[20px] opacity-75" />
@@ -129,8 +143,15 @@ const Register = () => {
             <Link className="link cursor-pointer text-[14px] font-[600]" to="/forgot-password">Forgot Password?</Link>
 
             <div className="flex items-center w-full mt-3 mb-3">
-              <Button type="submit" disabled={!valideValue} 
-              className="btn-org btn-lg w-full"><CircularProgress color="inherit" />Register</Button>
+              <Button type="submit" disabled={!valideValue} className="btn-org btn-lg w-full 
+              flex gap-3">
+                {
+                  isLoading === true ? <CircularProgress color="inherit" />
+                    :
+                    'Register'
+                }
+
+              </Button>
             </div>
 
             <p className="text-center">Already have an account? <Link className="link text-[14px] font-[600]" to="/login">Login</Link></p>
