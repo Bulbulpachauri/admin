@@ -3,12 +3,15 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
-import { Link, useNavigate } from "react-router-dom";
+import { data, Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { MyContext } from "../../App";
+import { postData } from "../../utils/api";
+import CircularProgress from '@mui/material/CircularProgress';
 
 const Register = () => {
 
+  const [isLoading, setIsLoading] = useState(false);
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [formFields, setFormsFields] = useState({
     name: "",
@@ -29,9 +32,13 @@ const Register = () => {
     });
   };
 
+  const valideValue = Object.values(formFields).every(el => el)
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
 
     
     if (formFields.name === "") {
@@ -50,8 +57,13 @@ const Register = () => {
     }
 
 
-    postData("/api/user/register").then((res)=>{
-      console.log(res)
+    postData("/api/user/register", formFields).then((res)=>{
+      setIsLoading(false);
+      setFormsFields({
+        name:"",
+        email:"",
+        password:""
+      })
     })
 
 
@@ -103,7 +115,8 @@ const Register = () => {
                 className="w-full"
                 onChange={onChangeInput}
               />
-              <Button className="!absolute top-[10px] right-[10px] z-50 !w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black" onClick={() => {
+              <Button className="!absolute top-[10px] right-[10px] z-50 !w-[35px] !h-[35px] 
+              !min-w-[35px] !rounded-full !text-black" onClick={() => {
                 setIsPasswordShow(!isPasswordShow)
               }}>
                 {
@@ -116,7 +129,8 @@ const Register = () => {
             <Link className="link cursor-pointer text-[14px] font-[600]" to="/forgot-password">Forgot Password?</Link>
 
             <div className="flex items-center w-full mt-3 mb-3">
-              <Button type="submit" className="btn-org btn-lg w-full">Register</Button>
+              <Button type="submit" disabled={!valideValue} 
+              className="btn-org btn-lg w-full"><CircularProgress color="inherit" />Register</Button>
             </div>
 
             <p className="text-center">Already have an account? <Link className="link text-[14px] font-[600]" to="/login">Login</Link></p>
