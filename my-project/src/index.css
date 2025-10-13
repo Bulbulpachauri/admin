@@ -152,3 +152,5 @@ input[type=number]::-webkit-outer-spin-button {
 
 .myAccountTabs li a.active::before{height: 100%; opacity: 1; top: 0px;}
 .myAccountTabs li a.active button svg{color: #ff5252 !important; opacity: 1 !important;}
+
+button .MuiCircularProgress-root{width: 30px !important; height: 30px !important;}
