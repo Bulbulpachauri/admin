@@ -31,127 +31,79 @@ const Navigation = () => {
           <div className="col_2 w-[60%]">
             <ul className="flex items-center gap-3 nav">
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500]" >
-                  <Button className="link transition !font-[500] text-[rgba(0,0,0,0.7)]
-                    hover:!text-[#ff5252] !py-4">
-                    Home
-                  </Button>
+                <Link to="/" className="link transition text-[14px] font-[500] block" >
+                  Home
                 </Link>
               </li>
               <li className="list-none relative">
-                <Link to="/" className="link transition text-[14px] font-[500]" >
-                  <Button className="link transition !font-[500] text-[rgba(0,0,0,0.7)]
-                    hover:!text-[#ff5252] !py-4">
-                    Fashion
-                  </Button>
+                <Link to="/" className="link transition text-[14px] font-[500] block" >
+                  Fashion
                 </Link>
 
                 <div className="submenu absolute top-[120%] left-[0%] min-w-[150px] bg-white shadow-md opacity-0 transition-all">
                   <ul>
                     <li className="list-none w-full relative">
-                      <Link to="/" className="w-full">
-                        <Button className="!text-[rgba(0,0,0,0.8)] w-full [!text-left] !justify-start !rounded-none">
-                          Men
-                        </Button>
-
+                      <Link to="/" className="w-full block p-2 text-left">
+                        Men
+                      </Link>
                         <div className="submenu absolute top-[0%] left-[100%] min-w-[150px] bg-white shadow-md opacity-0 transition-all">
                           <ul>
                             <li className="list-none w-full">
-                              <Link to="/" className="w-full">
-                                <Button className="!text-[rgba(0,0,0,0.8)] w-full [!text-left] !justify-start !rounded-none">T-Shirt</Button>
-                              </Link>
+                              <Link to="/" className="w-full block p-2">T-Shirt</Link>
                             </li>
                             <li className="list-none w-full">
-                              <Link to="/" className="w-full">
-                                <Button className="!text-[rgba(0,0,0,0.8)] w-full [!text-left] !justify-start !rounded-none">Jeans</Button>
-                              </Link>
+                              <Link to="/" className="w-full block p-2">Jeans</Link>
                             </li>
                             <li className="list-none w-full">
-                              <Link to="/" className="w-full">
-                                <Button className="!text-[rgba(0,0,0,0.8)] w-full [!text-left] !justify-start !rounded-none">Footwear</Button>
-                              </Link>
+                              <Link to="/" className="w-full block p-2">Footwear</Link>
                             </li>
                             <li className="list-none w-full">
-                              <Link to="/" className="w-full">
-                                <Button className="!text-[rgba(0,0,0,0.8)] w-full [!text-left] !justify-start !rounded-none">Watch</Button>
-                              </Link>
+                              <Link to="/" className="w-full block p-2">Watch</Link>
                             </li>
                           </ul>
                         </div>
-                      </Link>
                     </li>
                     <li className="list-none w-full">
-                      <Link to="/" className="w-full">
-                        <Button className="!text-[rgba(0,0,0,0.8)] w-full [!text-left] !justify-start !rounded-none">Women</Button>
-                      </Link>
+                      <Link to="/" className="w-full block p-2">Women</Link>
                     </li>
                     <li className="list-none w-full">
-                      <Link to="/" className="w-full">
-                        <Button className="!text-[rgba(0,0,0,0.8)] w-full [!text-left] !justify-start !rounded-none">Kids</Button>
-                      </Link>
+                      <Link to="/" className="w-full block p-2">Kids</Link>
                     </li>
                     <li className="list-none w-full">
-                      <Link to="/" className="w-full">
-                        <Button className="!text-[rgba(0,0,0,0.8)] w-full [!text-left] !justify-start !rounded-none">Girls</Button>
-                      </Link>
+                      <Link to="/" className="w-full block p-2">Girls</Link>
                     </li>
                     <li className="list-none w-full">
-                      <Link to="/" className="w-full">
-                        <Button className="!text-[rgba(0,0,0,0.8)] w-full [!text-left] !justify-start !rounded-none">
-                          Boys
-                          </Button>
-                      </Link>
+                      <Link to="/" className="w-full block p-2">Boys</Link>
                     </li>
                   </ul>
                 </div>
               </li>
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500]" >
-                  <Button className="link transition !font-[500] text-[rgba(0,0,0,0.7)]
-                    hover:!text-[#ff5252 !py-4]">Electronics</Button>
-                </Link>
+                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Electronics</Link>
               </li>
               
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500]" >
-                  <Button className="link transition !font-[500] text-[rgba(0,0,0,0.7)]
-                    hover:!text-[#ff5252] !py-4">Bag</Button>
-                </Link>
+                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Bag</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500]" >
-                  <Button className="link transition !font-[500] text-[rgba(0,0,0,0.7)]
-                    hover:!text-[#ff5252] !py-4">Footwear</Button>
-                </Link>
+                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Footwear</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500]" >
-                  <Button className="link transition !font-[500] text-[rgba(0,0,0,0.7)]
-                    hover:!text-[#ff5252] !py-4">Groceries</Button>
-                </Link>
+                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Groceries</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500]" >
-                  <Button className="link transition !font-[500] text-[rgba(0,0,0,0.7)]
-                    hover:!text-[#ff5252] !py-4">Bueaty</Button>
-                </Link>
+                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Beauty</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500]" >
-                  <Button className="link transition !font-[500] text-[rgba(0,0,0,0.7)]
-                    hover:!text-[#ff5252] !py-4">Wellness</Button>
-                </Link>
+                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Wellness</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500]" >
-                  <Button className="link transition !font-[500] text-[rgba(0,0,0,0.7)]
-                    hover:!text-[#ff5252] !py-4">Jewellery</Button>
-                </Link>
+                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Jewellery</Link>
               </li>
 
             </ul>
