@@ -4,7 +4,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
 
 export const postData = async (URL, formData) => {
     try {
-        const response = await fetch(apiUrl + URL, {
+        const response = await fetch(process.env.REACT_APP_API_URL + URL, {
             method: "POST",
             headers: {
                 'Authorization': `Banner ${localStorage.getItem('token')}`, //Include your API key in the Authorization

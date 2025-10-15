@@ -23,6 +23,7 @@ import MyList from "./Pages/MyList/index.jsx";
 import Checkout from "./Pages/Checkout/index.jsx";
 import MyAccount from "./Pages/MyAccount/index.jsx";
 import Orders from "./Pages/Orders/index.jsx";
+import Logout from "./Pages/Logout/index.jsx";
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -32,7 +33,8 @@ function App() {
   const [openProductDetailModal, setOpenProductDetailsModal] = useState(false);
   const [maxWidth, setMaxWidth] = useState('lg');
   const [fullWidth, setFullWidth] = useState(true);
-  const [isLogin, setIsLogin] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   const [openCartPanel, setOpenCartPanel] = useState(false);
 
@@ -47,7 +49,7 @@ function App() {
   };
 
 
-  const alerBox = (msg, type) =>{
+  const alertBox = (msg, type) =>{
     if(type === "success"){
       toast.success(msg);
     }
@@ -77,7 +79,7 @@ function App() {
     openAlertBox,
     isLogin,
     setIsLogin,
-    alerBox
+    alertBox
   };
 
   return (
@@ -98,6 +100,7 @@ function App() {
             <Route path={"/my-account"} exact={true} element={<MyAccount />} />
             <Route path={"/my-list"} exact={true} element={<MyList />} />
             <Route path={"/my-orders"} exact={true} element={<Orders />} />
+            <Route path={"/logout"} exact={true} element={<Logout />} />
           </Routes>
           <Footer />
         </MyContext.Provider>
