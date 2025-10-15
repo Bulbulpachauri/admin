@@ -1,0 +1,121 @@
+// Backup created on: 2024-12-19
+import React, { useContext, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { MyContext } from '../../App';
+import { postData } from '../../utils/api';
+
+const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [formFields, setFormFields] = useState({
+    email: '',
+    password: ''
+  });
+
+  const context = useContext(MyContext);
+  const history = useNavigate();
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      context.setIsLogin(true);
+      history('/');
+    }
+  }, []);
+
+  const onChangeInput = (e) => {
+    const { name, value } = e.target;
+    setFormFields({
+      ...formFields,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    
+    if (!formFields.email.trim()) {
+      context.alerBox("Please enter your email", "error");
+      return;
+    }
+    
+    if (!formFields.password.trim()) {
+      context.alerBox("Please enter your password", "error");
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    postData("/api/user/login", formFields).then((res) => {
+      setIsLoading(false);
+      
+      if (res?.data?.success === true) {
+        context.alerBox(res.data.message, "success");
+        localStorage.setItem("token", res.data.data.accessToken);
+        context.setIsLogin(true);
+        history("/");
+      } else {
+        context.alerBox(res?.data?.message || res?.message || "Login failed", "error");
+      }
+    }).catch((error) => {
+      setIsLoading(false);
+      console.error("Login error:", error);
+      context.alerBox("Network error. Please try again.", "error");
+    });
+  };
+
+  return (
+    <section className="section py-10">
+      <div className="container">
+        <div className="card shadow-md w-[400px] m-auto rounded-md bg-white p-5 px-10">
+          <h3 className="text-center text-[18px] text-black mb-5">
+            Login to your account
+          </h3>
+
+          <form className="w-full" onSubmit={handleSubmit}>
+            <div className="form-group w-full mb-5">
+              <input
+                type="email"
+                name="email"
+                placeholder="Email"
+                value={formFields.email}
+                onChange={onChangeInput}
+                disabled={isLoading}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <div className="form-group w-full mb-5">
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formFields.password}
+                onChange={onChangeInput}
+                disabled={isLoading}
+                className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+              />
+            </div>
+
+            <Link to="/forgot-password" className="text-sm font-semibold text-blue-600 hover:underline mb-3 block">
+              Forgot Password?
+            </Link>
+
+            <button 
+              type="submit" 
+              disabled={isLoading || !formFields.email.trim() || !formFields.password.trim()}
+              className="w-full bg-red-500 text-white py-3 px-4 rounded-md font-medium hover:bg-red-600 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isLoading ? 'Logging in...' : 'Login'}
+            </button>
+
+            <p className="text-center mt-4">
+              Not Registered? <Link className="text-blue-600 font-semibold hover:underline" to="/register">Sign Up</Link>
+            </p>
+          </form>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Login;

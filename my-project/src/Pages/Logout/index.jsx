@@ -1,34 +1,44 @@
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../../App';
-import { fatchDataFromApi } from '../../utils/api';
+import { postData } from '../../utils/api';
 
 const Logout = () => {
   const context = useContext(MyContext);
-  const navigate = useNavigate();
+  const history = useNavigate();
 
   useEffect(() => {
     const handleLogout = async () => {
       try {
-        await fatchDataFromApi("/api/user/logout");
-        localStorage.removeItem('token');
-        localStorage.removeItem('userEmail');
+        await postData("/api/user/logout", {});
+        localStorage.removeItem("token");
+        localStorage.removeItem("userEmail");
         context.setIsLogin(false);
-        context.openAlertBox("success", "Logged out successfully");
-        navigate('/');
+        context.alertBox("success", "Logout successful");
+        setTimeout(() => {
+          history("/login");
+        }, 1500);
       } catch (error) {
-        console.error('Logout error:', error);
-        localStorage.removeItem('token');
-        localStorage.removeItem('userEmail');
+        localStorage.removeItem("token");
+        localStorage.removeItem("userEmail");
         context.setIsLogin(false);
-        navigate('/');
+        context.alertBox("error", "Logout failed, but you've been signed out");
+        setTimeout(() => {
+          history("/login");
+        }, 1500);
       }
     };
 
     handleLogout();
-  }, [context, navigate]);
+  }, [context, history]);
 
-  return null;
+  return (
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="text-center">
+        <h2 className="text-xl">Logging out...</h2>
+      </div>
+    </div>
+  );
 };
 
 export default Logout;

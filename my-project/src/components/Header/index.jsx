@@ -166,7 +166,7 @@ const Header = () => {
           <IoIosHeartEmpty className="text-[18px]" /><span className="text-[14px]">Orders</span>
         </MenuItem>
         </Link>
-                <Link to="/my-logout" className="w-full block">
+                <Link to="/logout" className="w-full block">
          <MenuItem onClick={handleClose} className="flex gap-2!py-3">
           <IoIosLogOut className="text-[18px]" /><span className="text-[14px]">Logout</span>
         </MenuItem>
