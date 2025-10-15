@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 
 const OtpBox = ({ length = 6, onSubmit }) => {
   const [otp, setOtp] = useState(Array(length).fill(''));
@@ -17,6 +17,14 @@ const OtpBox = ({ length = 6, onSubmit }) => {
       inputsRef.current[index + 1].focus(); // Move to next input
     }
   };
+
+  // Call onSubmit whenever OTP changes
+  useEffect(() => {
+    const fullOtp = otp.join('');
+    if (onSubmit) {
+      onSubmit(fullOtp);
+    }
+  }, [otp, onSubmit]);
 
   // Handle backspace
   const handleKeyDown = (e, index) => {
@@ -61,9 +69,7 @@ const OtpBox = ({ length = 6, onSubmit }) => {
         ))}
       </div>
 
-      <button onClick={handleSubmit}  className="bg-primary text-white w-full text-center py-2 mt-5 rounded-md">
-        Submit OTP
-      </button>
+
     </div>
   );
 };

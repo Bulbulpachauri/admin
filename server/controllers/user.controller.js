@@ -144,7 +144,7 @@ export async function loginUserController(request, response) {
             });
         }
 
-        if (user.status !== "Active") {
+        if (user.status !== "active") {
             return response.status(400).json({
                 message: "Contact admin",
                 error: true,

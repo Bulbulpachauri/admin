@@ -3,7 +3,7 @@ import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import { IoMdEye } from "react-icons/io";
 import { IoMdEyeOff } from "react-icons/io";
-import { data, Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FcGoogle } from "react-icons/fc";
 import { MyContext } from "../../App";
 import { postData } from "../../utils/api";
@@ -21,6 +21,7 @@ const Register = () => {
   });
 
   const context = useContext(MyContext);
+  const history = useNavigate();
 
   const onChangeInput = (e) => {
     let { name, value } = e.target;
@@ -29,11 +30,10 @@ const Register = () => {
         ...formFields,
         [name]: value
       }
-    });
-  };
+    })
+  }
 
   const valideValue = Object.values(formFields).every(el => el)
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -42,36 +42,43 @@ const Register = () => {
 
 
     if (formFields.name === "") {
-      context.alertBox("error", "Please enter your full name");
+      context.alerBox("error", "Please enter your full name");
       return false
     }
 
     if (formFields.email === "") {
-      context.alertBox("error", "Please enter your email");
+      context.alerBox("error", "Please enter your email");
       return false
     }
 
     if (formFields.password === "") {
-      context.alertBox("error", "Please enter your password");
+      context.alerBox("error", "Please enter your password");
       return false
     }
 
 
     postData("/api/user/register", formFields).then((res) => {
       console.log(res);
+      setIsLoading(false);
 
       if (res?.error !== true) {
-
-        setIsLoading(false);
+        context.alerBox("success", res?.message);
+        localStorage.setItem("userEmail", formFields.email);
         setFormsFields({
           name: "",
           email: "",
-          password: ""
+          password: "",
+          phone: ""
         })
+
+        history("/verify")
       }else{
-        context.alertBox("error", res.message);
+        context.alerBox("error", res?.message);
       }
 
+    }).catch((error) => {
+      setIsLoading(false);
+      context.alerBox("error", "Registration failed. Please try again.");
     })
 
 
@@ -110,6 +117,20 @@ const Register = () => {
                 name="email"
                 label="Email Id"
                 value={formFields.email}
+                disabled={isLoading === true ? true : false}
+                variant="outlined"
+                className="w-full"
+                onChange={onChangeInput}
+              />
+            </div>
+
+            <div className="form-group w-full mb-5">
+              <TextField
+                type="tel"
+                id="phone"
+                name="phone"
+                label="Phone Number"
+                value={formFields.phone}
                 disabled={isLoading === true ? true : false}
                 variant="outlined"
                 className="w-full"

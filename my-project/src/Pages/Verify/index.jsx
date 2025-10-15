@@ -1,17 +1,52 @@
-import React from 'react';
+import { useContext, useState } from 'react';
 import OtpBox from '../../components/OtpBox';
 import { Button } from '@mui/material';
+import { postData } from '../../utils/api';
+import { useNavigate } from "react-router-dom";
+import { MyContext } from '../../App';
 
  const Verify = () => {
+  const [otp,setOtp]=useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const handleOtpSubmit=(value)=>{
+    setOtp(value);
+  };
 
-  const handleOtpSubmit = (otp) => {
-    console.log("OTP Submitted: ", otp);
-    // You can handle the OTP verification logic here
-  }
+  const history = useNavigate();
+  const context = useContext(MyContext);
 
   const verifyOTP=(e)=>{
     e.preventDefault();
-    alert(otp)
+    
+    if(otp.length !== 6) {
+      context.alerBox("error", "Please enter complete 6-digit OTP");
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    const requestData = {
+      email:localStorage.getItem("userEmail"),
+      otp:otp
+    };
+    
+    console.log("Sending OTP verification:", requestData);
+    
+    postData("/api/user/verifyEmail", requestData).then((res)=>{
+      console.log("OTP verification response:", res);
+      setIsLoading(false);
+      if(res?.error===false){
+        context.alerBox("success", res?.message);
+        history("/login")
+      }else{
+        context.alerBox("error", res?.message);
+      }
+    }).catch((error) => {
+      console.error("OTP verification error:", error);
+      setIsLoading(false);
+      context.alerBox("error", "Verification failed. Please try again.");
+    })
   }
 
   return (
@@ -27,13 +62,15 @@ import { Button } from '@mui/material';
 
              <p className="text-center mt-0 mb-4">OTP send to <span className="text-red-500 font-bold">bulbulpachauri@gmail.com</span></p>
 
-             <from onSubmit={verifyOTP}>
+             <form onSubmit={verifyOTP}>
               <OtpBox length={6} onSubmit={handleOtpSubmit}/>
 
              <div className="flex items-center justify-center mt-5 px-3">
-              <Button type='submit' className="w-full btn-org btn-lg">Verify OTP</Button>
+              <Button type='submit' disabled={isLoading || otp.length !== 6} className="w-full btn-org btn-lg">
+                {isLoading ? 'Verifying...' : 'Verify OTP'}
+              </Button>
              </div>
-             </from>
+             </form>
 
            </div>
          </div>
