@@ -23,7 +23,6 @@ import MyList from "./Pages/MyList/index.jsx";
 import Checkout from "./Pages/Checkout/index.jsx";
 import MyAccount from "./Pages/MyAccount/index.jsx";
 import Orders from "./Pages/Orders/index.jsx";
-import Logout from "./Pages/Logout/index.jsx";
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -99,7 +98,6 @@ function App() {
             <Route path={"/my-account"} exact={true} element={<MyAccount />} />
             <Route path={"/my-list"} exact={true} element={<MyList />} />
             <Route path={"/my-orders"} exact={true} element={<Orders />} />
-            <Route path={"/my-logout"} exact={true} element={<Logout />} />
           </Routes>
           <Footer />
         </MyContext.Provider>
