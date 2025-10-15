@@ -45,6 +45,8 @@ const Header = () => {
   const context = useContext(MyContext)
 
 
+
+
   return (
     <header className="header-wapper bg-white shadow-sm">
       <div className="top-strip py-2 border-t-[1px] border-gray-350 border-b-[1px] text-sm text-gray-700">
@@ -167,7 +169,7 @@ const Header = () => {
         </MenuItem>
         </Link>
                 <Link to="/my-logout" className="w-full block">
-         <MenuItem onClick={handleClose} className="flex gap-2!py-3">
+         <MenuItem onClick={handleClose} className="flex gap-2 !py-3">
           <IoIosLogOut className="text-[18px]" /><span className="text-[14px]">Logout</span>
         </MenuItem>
         </Link>
