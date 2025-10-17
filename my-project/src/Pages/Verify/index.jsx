@@ -7,7 +7,7 @@ import { MyContext } from '../../App';
 
  const Verify = () => {
   const [otp,setOtp]=useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading] = useState(false);
   
   const handleOtpSubmit=(value)=>{
     setOtp(value);
@@ -16,38 +16,22 @@ import { MyContext } from '../../App';
   const history = useNavigate();
   const context = useContext(MyContext);
 
-  const verifyOTP=(e)=>{
+  const verifyOTP = (e) => {
     e.preventDefault();
     
-    if(otp.length !== 6) {
-      context.alerBox("error", "Please enter complete 6-digit OTP");
-      return;
+      postData("/api/user/verifyEmail",{
+        email: localStorage.getItem("userEmail"),
+        otp: otp
+      }).then((res)=>{
+        if(res?.error === false){
+          context.alertBox("success", res?.message);
+          localStorage.removeItem("userEmail")
+          history("/login");
+        }else{
+          context.alertBox("error", res?.message);
+        }
+      })
     }
-    
-    setIsLoading(true);
-    
-    const requestData = {
-      email:localStorage.getItem("userEmail"),
-      otp:otp
-    };
-    
-    console.log("Sending OTP verification:", requestData);
-    
-    postData("/api/user/verifyEmail", requestData).then((res)=>{
-      console.log("OTP verification response:", res);
-      setIsLoading(false);
-      if(res?.error===false){
-        context.alerBox("success", res?.message);
-        history("/login")
-      }else{
-        context.alerBox("error", res?.message);
-      }
-    }).catch((error) => {
-      console.error("OTP verification error:", error);
-      setIsLoading(false);
-      context.alerBox("error", "Verification failed. Please try again.");
-    })
-  }
 
   return (
     <section className="section py-10">

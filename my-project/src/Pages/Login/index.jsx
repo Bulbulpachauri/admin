@@ -6,9 +6,11 @@ import { IoMdEyeOff } from "react-icons/io";
 import { Link, useNavigate } from 'react-router-dom';
 import { FcGoogle } from "react-icons/fc";
 import { MyContext } from '../../App';
+import CircularProgress from '@mui/material/CircularProgress';
+import { postData } from '../../utils/api';
 
 const Login = () => {
-
+  const [isLoading, setIsLoading] = useState(false);
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [formFields, setFormsFields] = useState({
     email: '',
@@ -16,23 +18,83 @@ const Login = () => {
   });
 
   const context = useContext(MyContext);
-  const histoty = useNavigate();
+  const history = useNavigate();
+
+
 
   const forgotPassword = () => {
-                context.openAlertBox("success", "OTP Send");
-          histoty("/verify");
+
+    if(formFields.email === ""){
+      context.alertBox("error", "Please enter your email id");
+      return false
+    }
+    else{
+      context.alertBox("success", `OTP send to ${formFields.email}`);
+      localStorage.setItem("userEmail", formFields.email);
+      localStorage.setItem("actionType", "forgotPassword");
+
+            postData("/api/user/forgot-password",{
+              email : formFields.email
+            }).then((res)=>{
+              if(res?.error === false){
+                context.alertBox("success", res?.message);
+                history("/verify");
+              }else{
+                context.alertBox("error", res?.message);
+              }
+            })
+
+            
+    }
+
   }
 
+  const onChangeInput = (e) => {
+    let { name, value } = e.target;
+    setFormsFields(() => {
+      return {
+        ...formFields,
+        [name]: value
+      }
+    })
+  }
+
+
+  const valideValue = Object.values(formFields).every(el => el)
+ 
   const handleLogin = (e) => {
     e.preventDefault();
+
+    setIsLoading(true);
+
+    if(formFields.email === ""){
+      context.alertBox("error", "Please enter your email id");
+      setIsLoading(false);
+      return false
+    }
+
+    if(formFields.password === ""){
+      context.alertBox("error", "Please enter your password");
+      setIsLoading(false);
+      return false
+    }
     
-    // Set user as logged in
-    context.setIsLogin(true);
-    localStorage.setItem("token", "dummy-token");
-    localStorage.setItem("userEmail", formFields.email);
-    
-    context.alertBox("Login successful!", "success");
-    histoty('/');
+    postData("/api/user/login", formFields).then((res) => {
+      if(res?.success === true){
+        localStorage.setItem("token", res.data.accessToken);
+        localStorage.setItem("userEmail", formFields.email);
+        context.setIsLogin(true);
+        context.alertBox("success", "Login successful!");
+        setIsLoading(false);
+        history('/');
+      } else {
+        context.alertBox("error", res?.message || "Login failed");
+        setIsLoading(false);
+      }
+    }).catch((error) => {
+      context.alertBox("error", "Login failed");
+      setIsLoading(false);
+    });
   }
 
 
@@ -47,23 +109,27 @@ const Login = () => {
           <form className="w-full mt-5">
             <div className="form-group w-full mb-5">
               <TextField
-                type="emai"
+                type="email"
                 id="email"
                 label="Email Id"
                 variant="outlined"
                 className="w-full"
-                name="name"
+                name="email"
+                value={formFields.email}
+                onChange={onChangeInput}
               />
             </div>
 
             <div className="form-group w-full mb-5 relative">
               <TextField
-              type={isPasswordShow===false ? 'password': 'text'}
+                type={isPasswordShow===false ? 'password': 'text'}
                 id="password"
                 label="Password"
                 variant="outlined"
                 className="w-full"
                 name="password"
+                value={formFields.password}
+                onChange={onChangeInput}
               />
               <Button className="!absolute top-[10px] right-[10px] z-50 !w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black" onClick={() => {
                 setIsPasswordShow(!isPasswordShow)

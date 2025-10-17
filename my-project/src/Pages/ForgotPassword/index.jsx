@@ -34,9 +34,10 @@ const ForgotPassword = () => {
                 className="w-full"
                 name="name"
               />
-               <Button className="!absolute top-[10px] right-[10px] z-50 !w-[35px] !h-[35px] !min-w-[35px] !rounded-full !text-black" onClick={() => {
-                setIsPasswordShow2(!isPasswordShow2)
-              }}>
+               <Button className="!absolute top-[10px] right-[10px] z-50 !w-[35px] !h-[35px] !min-w-[35px] 
+               !rounded-full !text-black" onClick={() => {setIsPasswordShow2(!isPasswordShow2)
+              }}
+              >
                 {
                   isPasswordShow2 === false ? <IoMdEye className="text-[20px] opacity-75" /> :
                     <IoMdEyeOff className="text-[20px] opacity-75" />

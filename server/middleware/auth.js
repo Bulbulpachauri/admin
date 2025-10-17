@@ -21,7 +21,6 @@ const auth = async (request, response, next) => {
         }
 
         request.userId = decode.id;
-        // request.userRole = decode.role;
         
         next()
 

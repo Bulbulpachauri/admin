@@ -38,31 +38,35 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    setIsLoading(true);
-
-
     if (formFields.name === "") {
-      context.alerBox("error", "Please enter your full name");
+      context.alertBox("Please enter your full name", "error");
       return false
     }
 
     if (formFields.email === "") {
-      context.alerBox("error", "Please enter your email");
+      context.alertBox("Please enter your email", "error");
       return false
     }
 
     if (formFields.password === "") {
-      context.alerBox("error", "Please enter your password");
+      context.alertBox("Please enter your password", "error");
       return false
     }
+
+    if (formFields.phone === "") {
+      context.alertBox("Please enter your phone number", "error");
+      return false
+    }
+
+    setIsLoading(true);
 
 
     postData("/api/user/register", formFields).then((res) => {
       console.log(res);
       setIsLoading(false);
 
-      if (res?.error !== true) {
-        context.alerBox("success", res?.message);
+      if (res?.success === true) {
+        context.alertBox(res?.message, "success");
         localStorage.setItem("userEmail", formFields.email);
         setFormsFields({
           name: "",
@@ -73,12 +77,12 @@ const Register = () => {
 
         history("/verify")
       }else{
-        context.alerBox("error", res?.message);
+        context.alertBox(res?.message, "error");
       }
 
     }).catch((error) => {
       setIsLoading(false);
-      context.alerBox("error", "Registration failed. Please try again.");
+      context.alertBox("Registration failed. Please try again.", "error");
     })
 
 
@@ -164,14 +168,22 @@ const Register = () => {
             <Link className="link cursor-pointer text-[14px] font-[600]" to="/forgot-password">Forgot Password?</Link>
 
             <div className="flex items-center w-full mt-3 mb-3">
-              <Button type="submit" disabled={!valideValue} className="btn-org btn-lg w-full 
-              flex gap-3">
+              <Button 
+                type="submit" 
+                disabled={isLoading || !valideValue} 
+                className="btn-org btn-lg w-full flex gap-3"
+                style={{
+                  backgroundColor: '#ff5252',
+                  color: '#fff',
+                  padding: '12px 20px',
+                  fontSize: '16px'
+                }}
+              >
                 {
-                  isLoading === true ? <CircularProgress color="inherit" />
+                  isLoading === true ? <CircularProgress color="inherit" size={20} />
                     :
                     'Register'
                 }
-
               </Button>
             </div>
 

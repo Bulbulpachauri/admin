@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { MyContext } from '../../App';
 import { postData } from '../../utils/api';
@@ -6,8 +6,12 @@ import { postData } from '../../utils/api';
 const Logout = () => {
   const context = useContext(MyContext);
   const history = useNavigate();
+  const hasLoggedOut = useRef(false);
 
   useEffect(() => {
+    if (hasLoggedOut.current) return;
+    hasLoggedOut.current = true;
+
     const handleLogout = async () => {
       try {
         await postData("/api/user/logout", {});
@@ -30,7 +34,7 @@ const Logout = () => {
     };
 
     handleLogout();
-  }, [context, history]);
+  }, []);
 
   return (
     <div className="flex items-center justify-center min-h-screen">

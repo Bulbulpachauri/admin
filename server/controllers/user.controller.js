@@ -208,7 +208,6 @@ export async function loginUserController(request, response) {
 //logout controller
 export async function logoutController(request, response) {
     try {
-
         const userid = request.userId; //auth middleware
 
         const cookiesOption = {
@@ -419,10 +418,10 @@ export async function forgotPasswordController(request, response) {
 
         await sendEmailFun(
             email,
-            "Verify email from Ecommerce App",
+            "Verify OTP from Ecommerce app",
             "",
             VerificationEmail(user.name, verifyCode)
-        );
+        )
 
         return response.json({
             message: "check your email",
