@@ -7,7 +7,7 @@ export const postData = async (URL, formData) => {
         const response = await fetch(apiUrl + URL, {
             method: "POST",
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`, //Include your API key in the Authorization
+                'Authorization': `Bearer ${localStorage.getItem('token')}`, //Include your API key in the Authorization
                 'Content-Type': 'application/json', //Adjust the content type as needed
             },
 
@@ -53,18 +53,13 @@ export const logout = async () => {
 
 
 export const editData = async (URL, updatedData) => {
-     const params={
+    const response = await fetch(apiUrl + '/api/user/logout', {
+            method: "GET",
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`, //Include your API key in the Authorization
-                'Content-Type': 'multipart/form-data', //Adjust the content type as needed
-            },
-        }
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            }
+        });
 
-        var response;
-        const {res} = await axios.put(apiUrl + URL,updatedData, params).then((res)=>{
-                    console.log(res)
-                    response = res;
-        })  
+        const {res} = await axios.put(apiurl + URL,updatedData, params)
         return res;
-            
 }

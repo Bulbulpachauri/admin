@@ -1,23 +1,99 @@
-import React from 'react'
-import { Button } from '@mui/material';
+import React, { useState, useContext } from 'react'
+import { Button, CircularProgress } from '@mui/material';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
 import { IoBagCheckOutline } from "react-icons/io5";
 import { IoIosHeartEmpty } from "react-icons/io";
 import { IoIosLogOut } from "react-icons/io";
-import { NavLink } from 'react-router';
+import { NavLink } from 'react-router-dom';
+import { MyContext } from '../../App';
+import { editData } from '../../utils/api';
 
 const AccountSidebar = () => {
+
+    const [previews, setPreviews] = useState([]);
+    const [uploading, setUploading] = useState(false);
+
+    const context = useContext(MyContext)
+
+    let img_arr = [];
+    let uniqueArray = [];
+    let selectedImages = [];
+
+    const FormData = new FormData();
+
+    const onChangeFile = async(e, apiEndpoint) => {
+        try {
+            setPreviews([]);
+            const files = e.target.files;
+            setUploading(true);
+
+            for (var i = 0; i < files.length; i++) {
+                if (files[i] &&(files[i].type === "image/jpeg" || files[i].type === "image/jpg" ||
+                        files[i].type === "image/png" ||
+                        files[i].type === "image/webp")
+                ) {
+
+                    const file = files[i];
+
+                    selectedImages.push(file);
+                    FormData.append(`avatar`, file);
+
+
+                } else {
+                    context.alertBox("error", "Please select a valid JPG, PNG or webp image file.");
+                    setUploading(false);
+                    return false;
+                }
+            }
+
+            editData("/api/user/user-avatar", FormData).then((res) => {
+                setUploading(false);
+                let avatar=[];
+                avatar.push(res?.data?.avatar);
+                setPreviews(avatar);
+                console.log(res)
+            });
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <div className="card bg-white shadow-md rounded-md sticky top-[10px] ">
             <div className="w-full p-5 flex items-center jutify-center flex-col">
-                <div className="w-[110px] h-[110px] rounded-full overflow-hidden mb-4 relative group">
-                    <img src="https://demos.codezeel.com/prestashop/PRS21/PRS210502/modules/cz_instagramfeeds/views/img/instapic/8.jpg" />
+                <div className="w-[110px] h-[110px] rounded-full overflow-hidden mb-4 relative group 
+                flex items-center justify-center bg-gray-200">
+
+                    {
+                        uploading === true ? <CircularProgress color="inherit" /> :
+                        <>
+                        {
+                            previews?.length!==0 && previews?.map((img, index) => {
+                                console.log(img);
+                                return (
+                                <img 
+                                src={img}
+                                key={index}
+                                className='w-full h-full object-cover'
+                                />
+                            )
+                            })  
+                        }
+                        </>
+                            
+                    }
+
 
                     <div className="overlay w-[100%] h-[100%] absolute top-0 left-0 z-50 bg-[rgba(0,0,0,0.5)]
                                  flex items-center justify-center cursor-pointer opacity-0 transition-all group-hover:opacity-100">
                         <FaCloudUploadAlt className="text-[#fff] text-[25px]" />
-                        <input type="file" className="absolute top-0 left-0 w-full h-full opacity-0 " />
+                        <input type="file" className="absolute top-0 left-0 w-full h-full opacity-0 "  onChange={(e) =>
+                            onChangeFile(e, "/api/user/user-avatar")
+                        }
+                            name="avatar"
+                        />
                     </div>
 
                 </div>
