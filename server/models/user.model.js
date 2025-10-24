@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
         required: [true, "Provide password"],
     },
     avatar: {
-        public_id: String,
+        filename: String,
         secure_url: String
     },
     phone: {

@@ -7,10 +7,10 @@ export const postData = async (URL, formData) => {
         const response = await fetch(apiUrl + URL, {
             method: "POST",
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`, //Include your API key in the Authorization
+                'Authorization': `Bearer ${localStorage.getItem('token')}`, //Include your API key in the Authorization
                 'Content-Type': 'application/json', //Adjust the content type as needed
             },
-
+            credentials: 'include',
             body: JSON.stringify(formData)
         });
 
@@ -33,10 +33,11 @@ export const postData = async (URL, formData) => {
 export const logout = async () => {
     try {
         const response = await fetch(apiUrl + '/api/user/logout', {
-            method: "GET",
+            method: "POST",
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            }
+            },
+            credentials: 'include'
         });
 
         if (response.ok) {
@@ -52,19 +53,41 @@ export const logout = async () => {
 }
 
 
-export const editData = async (URL, updatedData) => {
-     const params={
+export const fetchData = async (URL) => {
+    try {
+        const response = await axios.get(apiUrl + URL, {
             headers: {
-                'Authorization': `Bearer ${localStorage.getItem('accesstoken')}`, //Include your API key in the Authorization
-                'Content-Type': 'multipart/form-data', //Adjust the content type as needed
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
             },
-        }
+            withCredentials: true
+        });
+        return response;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+}
 
-        var response;
-        const {res} = await axios.put(apiUrl + URL,updatedData, params).then((res)=>{
-                    console.log(res)
-                    response = res;
-        })  
-        return res;
-            
+export const editData = async (URL, updatedData) => {
+     const headers = {
+         'Authorization': `Bearer ${localStorage.getItem('token')}`,
+     };
+     
+     // Don't set Content-Type for FormData, let browser set it automatically
+     if (!(updatedData instanceof FormData)) {
+         headers['Content-Type'] = 'application/json';
+     }
+     
+     const params = {
+         headers,
+         withCredentials: true
+     }
+
+     try {
+         const response = await axios.put(apiUrl + URL, updatedData, params);
+         return response;
+     } catch (error) {
+         console.error('API Error:', error);
+         throw error;
+     }
 }

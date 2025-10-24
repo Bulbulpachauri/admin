@@ -25,8 +25,15 @@ import { MyContext } from '../../App';
       }).then((res)=>{
         if(res?.error === false){
           context.alertBox("success", res?.message);
-          localStorage.removeItem("userEmail")
-          history("/login");
+          const actionType = localStorage.getItem("actionType");
+          
+          if(actionType === "forgotPassword"){
+            // Don't remove userEmail for password reset
+            history("/forgot-password");
+          } else {
+            localStorage.removeItem("userEmail");
+            history("/login");
+          }
         }else{
           context.alertBox("error", res?.message);
         }

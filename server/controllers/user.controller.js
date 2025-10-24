@@ -6,16 +6,7 @@ import { VerificationEmail } from "../utils/verifyEmailTemplate.js";
 import generateAccessToken from "../utils/generatedAccessToken.js";
 import generateRefreshToken from "../utils/generatedRefreshToken.js";
 
-import { v2 as cloudinary } from 'cloudinary';
 import fs from 'fs';
-import { data } from "react-router-dom";
-
-cloudinary.config({
-    cloud_name: process.env.cloudinary_Config_Cloud_Name,
-    api_key: process.env.cloudinary_Config_api_key,
-    api_secret: process.env.cloudinary_Config_api_secret,
-    secure: true,
-});
 
 export async function registerUserController(request, response) {
     try {
@@ -51,8 +42,8 @@ export async function registerUserController(request, response) {
             otpExprise: Date.now() + 600000,
             phone: phone,
             avatar: {
-                public_id: "Ecommerce/dqsno28kptsbp2fudb5g",
-                secure_url: "https://res.cloudinary.com/dlicvfaqr/image/upload/v1716962927/Ecommerce/dqsno28kptsbp2fudb5g.png"
+                filename: "default-avatar.png",
+                secure_url: "http://localhost:8000/uploads/default-avatar.png"
             }
         });
 
@@ -182,7 +173,8 @@ export async function loginUserController(request, response) {
         response.cookie("refreshToken", refreshtoken, cookiesOption);
 
         await UserModel.findByIdAndUpdate(user._id, {
-            last_login_date: new Date()
+            last_login_date: new Date(),
+            access_token: accesstoken
         });
 
         return response.json({
@@ -241,56 +233,35 @@ export async function logoutController(request, response) {
 //image upload
 export async function useAvatarController(request, response) {
     try {
-        const imageArr = [];
-        const userId = request.userId; //auth middleware
-        const image = request.files;
-
-        const user = await UserModel.findById(userId);
-
-        if (!user) {
-            return response.status(404).json({
-                message: "User not found",
+        const userId = request.userId;
+        const files = request.files;
+        
+        if (!files || files.length === 0) {
+            return response.status(400).json({
+                message: "No file uploaded",
                 error: true,
                 success: false
-            })
+            });
         }
 
-        //first remove image from cloudinary
-        if (user.avatar && user.avatar.public_id) {
-            await cloudinary.uploader.destroy(user.avatar.public_id);
-        }
-
-        const options = {
-            use_filename: true,
-            unique_filename: false,
-            overwrite: true,
-            folder: "Ecommerce"
+        const file = files[0];
+        const avatarData = {
+            filename: file.filename,
+            secure_url: `http://localhost:8000/uploads/${file.filename}`
         };
 
-        for (let i = 0; i < image?.length; i++) {
-            const result = await cloudinary.uploader.upload(image[i].path, options);
-            imageArr.push({
-                public_id: result.public_id,
-                secure_url: result.secure_url
-            });
-            fs.unlinkSync(image[i].path);
-        }
-
-        if (imageArr.length > 0) {
-            user.avatar = imageArr[0];
-            await user.save();
-        }
-
+        await UserModel.findByIdAndUpdate(userId, { avatar: avatarData });
 
         return response.status(200).json({
-            _id: userId,
-            avatar: user.avatar
+            message: "Avatar updated successfully",
+            error: false,
+            success: true,
+            data: { avatar: avatarData.secure_url }
         });
-
 
     } catch (error) {
         return response.status(500).json({
-            message: error.message || error,
+            message: error.message,
             error: true,
             success: false
         });
@@ -305,14 +276,14 @@ export async function removeImageFromCloudinary(request, response) {
         }
 
         const urlArr = imgUrl.split("/");
-        const image = urlArr[urlArr.length - 1];
-        const imageName = image.split(".")[0];
+        const filename = urlArr[urlArr.length - 1];
+        const filePath = `uploads/${filename}`;
 
-        if (imageName) {
-            const result = await cloudinary.uploader.destroy("Ecommerce/" + imageName);
-            response.status(200).send(result);
+        if (filename && fs.existsSync(filePath)) {
+            fs.unlinkSync(filePath);
+            response.status(200).json({ message: "Image deleted successfully" });
         } else {
-            response.status(400).send("Invalid image URL");
+            response.status(400).send("Image file not found");
         }
     } catch (error) {
         return response.status(500).json({
@@ -458,7 +429,7 @@ export async function verifyForgotPasswordOtp(request, response) {
         })
     }
 
-    if(!email || !top){
+    if(!email || !otp){
         return response.status(400).json({
             message: "Provide required field email, otp.",
             error: true,
@@ -477,7 +448,7 @@ export async function verifyForgotPasswordOtp(request, response) {
 
     const currentTime = new Date().toISOString()
 
-    if(user.otpExprise < currentTime){
+    if(user.otpExprise < Date.now()){
         return response.status(400).json({
             message: "Otp is expired",
             error: true,
@@ -578,7 +549,7 @@ export async function refreshToken(request, response) {
             })
         }
 
-        const userId = verifyToken._id;
+        const userId = verifyToken.id;
         const newAccessToken = await generateAccessToken(userId);
 
         const cookiesOption = {

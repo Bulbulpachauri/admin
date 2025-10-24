@@ -16,5 +16,18 @@ userRouter.post('/verify-forgot-password-otp', verifyForgotPasswordOtp);
 userRouter.post('/reset-password',resetPassword);
 userRouter.post('/refresh-token', refreshToken)
 userRouter.get('/user-details',auth,userDetails)
+userRouter.get('/test-auth', auth, (req, res) => {
+    res.json({ message: 'Auth working', userId: req.userId });
+});
+
+userRouter.post('/test-upload', auth, upload.array('avatar'), (req, res) => {
+    console.log('Test upload - User ID:', req.userId);
+    console.log('Test upload - Files:', req.files);
+    res.json({ 
+        message: 'Test upload endpoint working', 
+        userId: req.userId,
+        filesReceived: req.files?.length || 0
+    });
+});
 
 export default userRouter

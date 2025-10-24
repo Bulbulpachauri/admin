@@ -80,6 +80,7 @@ const Login = () => {
     }
     
     postData("/api/user/login", formFields).then((res) => {
+      console.log('Login response:', res);
       if(res?.success === true){
         localStorage.setItem("token", res.data.accessToken);
         localStorage.setItem("userEmail", formFields.email);
@@ -92,6 +93,7 @@ const Login = () => {
         setIsLoading(false);
       }
     }).catch((error) => {
+      console.error('Login error:', error);
       context.alertBox("error", "Login failed");
       setIsLoading(false);
     });

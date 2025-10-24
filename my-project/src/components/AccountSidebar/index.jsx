@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { Button, CircularProgress } from '@mui/material';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { FaRegUser } from "react-icons/fa";
@@ -7,26 +7,43 @@ import { IoIosHeartEmpty } from "react-icons/io";
 import { IoIosLogOut } from "react-icons/io";
 import { NavLink } from 'react-router-dom';
 import { MyContext } from '../../App';
-import { editData } from '../../utils/api';
+import { editData, fetchData } from '../../utils/api';
 
 const AccountSidebar = () => {
 
     const [previews, setPreviews] = useState([]);
     const [uploading, setUploading] = useState(false);
+    const [userDetails, setUserDetails] = useState(null);
 
     const context = useContext(MyContext)
 
-    let img_arr = [];
-    let uniqueArray = [];
-    let selectedImages = [];
+    useEffect(() => {
+        fetchUserDetails();
+    }, []);
 
-    const FormData = new FormData();
+    const fetchUserDetails = async () => {
+        try {
+            const response = await fetchData('/api/user/user-details');
+            if (response.data && response.data.success) {
+                setUserDetails(response.data.data);
+                if (response.data.data.avatar && response.data.data.avatar.secure_url) {
+                    setPreviews([response.data.data.avatar.secure_url]);
+                }
+            }
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
+    };
+
+    let selectedImages = [];
 
     const onChangeFile = async(e, apiEndpoint) => {
         try {
             setPreviews([]);
             const files = e.target.files;
             setUploading(true);
+            
+            const formData = new FormData();
 
             for (var i = 0; i < files.length; i++) {
                 if (files[i] &&(files[i].type === "image/jpeg" || files[i].type === "image/jpg" ||
@@ -37,7 +54,7 @@ const AccountSidebar = () => {
                     const file = files[i];
 
                     selectedImages.push(file);
-                    FormData.append(`avatar`, file);
+                    formData.append(`avatar`, file);
 
 
                 } else {
@@ -47,12 +64,32 @@ const AccountSidebar = () => {
                 }
             }
 
-            editData("/api/user/user-avatar", FormData).then((res) => {
+
+            
+            editData("/api/user/user-avatar", formData).then((res) => {
                 setUploading(false);
-                let avatar=[];
-                avatar.push(res?.data?.avatar);
-                setPreviews(avatar);
-                console.log(res)
+
+                if (res.data && res.data.success) {
+                    let avatar = [];
+                    avatar.push(res.data.data.avatar);
+                    setPreviews(avatar);
+                    context.alertBox("success", "Avatar updated successfully!");
+                } else {
+
+                    context.alertBox("error", res.data?.message || "Failed to upload avatar.");
+                }
+            }).catch((error) => {
+                setUploading(false);
+
+                
+                if (error.response?.status === 401) {
+                    context.alertBox("error", "Please login again. Your session has expired.");
+                } else if (error.response?.status === 500) {
+                    context.alertBox("error", "Server error. Please try again later.");
+                } else {
+                    const errorMsg = error.response?.data?.message || "Failed to upload avatar. Please try again.";
+                    context.alertBox("error", errorMsg);
+                }
             });
 
         } catch (error) {
@@ -71,7 +108,7 @@ const AccountSidebar = () => {
                         <>
                         {
                             previews?.length!==0 && previews?.map((img, index) => {
-                                console.log(img);
+
                                 return (
                                 <img 
                                 src={img}
@@ -98,15 +135,15 @@ const AccountSidebar = () => {
 
                 </div>
 
-                <h3>Bulbul Pachauri</h3>
-                <h6 className="text-[13px] font-[500]">bulbulpachauri21@gmail.com</h6>
+                <h3>{userDetails?.name || 'User'}</h3>
+                <h6 className="text-[13px] font-[500]">{userDetails?.email || 'user@example.com'}</h6>
 
             </div>
 
 
             <ul className="list-none pb-5 bg-[(#f1f1f1)] myAccountTabs">
                 <li className="w-full">
-                    <NavLink to="/my-account" exact={true} activeclassName="isActive">
+                    <NavLink to="/my-account" className={({ isActive }) => isActive ? "isActive" : ""}>
                         <Button className="w-full !text-left !py-2 !px-5 !justify-start !capitalize !text-[rgba(0,0,0,0.7)]
                              !rounded-none flex items-center gap-2"><FaRegUser className="text-[17px]" />My Profile
                         </Button>
@@ -116,7 +153,7 @@ const AccountSidebar = () => {
 
             <ul className="list-none pb-5">
                 <li className="w-full">
-                    <NavLink to="/my-list" exact={true} activeclassName="isActive">
+                    <NavLink to="/my-list" className={({ isActive }) => isActive ? "isActive" : ""}>
                         <Button className="w-full !text-left !py-2 !px-5 !justify-start !capitalize !text-[rgba(0,0,0,0.7)]
                              !rounded-none flex items-center gap-2"><IoBagCheckOutline className="text-[17px]" />My List
                         </Button>
@@ -126,7 +163,7 @@ const AccountSidebar = () => {
 
             <ul className="list-none pb-5">
                 <li className="w-full">
-                    <NavLink to="/my-orders" exact={true} activeclassName="isActive">
+                    <NavLink to="/my-orders" className={({ isActive }) => isActive ? "isActive" : ""}>
                         <Button className="w-full !text-left !py-2 !px-5 !justify-start !capitalize !text-[rgba(0,0,0,0.7)]
                              !rounded-none flex items-center gap-2">< IoIosHeartEmpty className="text-[17px]" />My Orders
                         </Button>
@@ -136,7 +173,7 @@ const AccountSidebar = () => {
 
             <ul className="list-none pb-5">
                 <li className="w-full">
-                    <NavLink to="/my-logout" exact={true} activeclassName="isActive">
+                    <NavLink to="/my-logout" className={({ isActive }) => isActive ? "isActive" : ""}>
                         <Button className="w-full !text-left !py-2 !px-5 !justify-start !capitalize !text-[rgba(0,0,0,0.7)] 
                             !rounded-none flex items-center gap-2"><IoIosLogOut className="text-[17px]" />Logout
                         </Button>

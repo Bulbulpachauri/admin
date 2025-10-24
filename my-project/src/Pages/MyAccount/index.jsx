@@ -1,22 +1,61 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import { Button } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import AccountSidebar from '../../components/AccountSidebar';
 import { MyContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
+import { fetchData, editData } from '../../utils/api';
+
 const MyAccount = () => {
+    const [userDetails, setUserDetails] = useState({
+        name: '',
+        email: '',
+        phone: ''
+    });
+    const [loading, setLoading] = useState(false);
 
     const context = useContext(MyContext);
     const history = useNavigate();
 
     useEffect(() => {
-        const token = localStorage.getItem("accessToken");
-
-        if (token===null) {
-            history("/my-account");
+        const token = localStorage.getItem("token");
+        if (token === null) {
+            history("/login");
+        } else {
+            fetchUserDetails();
         }
-
     }, [context?.isLogin]);
+
+    const fetchUserDetails = async () => {
+        try {
+            const response = await fetchData('/api/user/user-details');
+            if (response.data && response.data.success) {
+                setUserDetails(response.data.data);
+            }
+        } catch (error) {
+            console.error('Error fetching user details:', error);
+        }
+    };
+
+    const handleInputChange = (e) => {
+        setUserDetails({
+            ...userDetails,
+            [e.target.name]: e.target.value
+        });
+    };
+
+    const handleSave = async () => {
+        setLoading(true);
+        try {
+            const response = await editData(`/api/user/${userDetails._id}`, userDetails);
+            if (response.data && response.data.success) {
+                context.alertBox("success", "Profile updated successfully!");
+            }
+        } catch (error) {
+            context.alertBox("error", "Failed to update profile");
+        }
+        setLoading(false);
+    };
 
     return (
         <section className="py-10 w-full">
@@ -36,12 +75,15 @@ const MyAccount = () => {
                         <form className="mt-5">
                             <div className="flex items-center gap-5">
                                 <div className="w-[50%]">
-                                        <TextField
-                                            label="Full Name"
-                                            variant="outlined"
-                                            size="small"
-                                            className="w-full"
-                                        />
+                                    <TextField
+                                        label="Full Name"
+                                        variant="outlined"
+                                        size="small"
+                                        className="w-full"
+                                        name="name"
+                                        value={userDetails.name}
+                                        onChange={handleInputChange}
+                                    />
                                 </div>
 
                                 <div className="w-[50%]">
@@ -50,9 +92,11 @@ const MyAccount = () => {
                                         variant="outlined"
                                         size="small"
                                         className="w-full"
+                                        name="email"
+                                        value={userDetails.email}
+                                        onChange={handleInputChange}
                                     />
                                 </div>
-
                             </div>
 
                             <div className="flex items-center mt-4 gap-5">
@@ -62,18 +106,30 @@ const MyAccount = () => {
                                         variant="outlined"
                                         size="small"
                                         className="w-full"
+                                        name="phone"
+                                        value={userDetails.phone}
+                                        onChange={handleInputChange}
                                     />
                                 </div>
                             </div>
 
-
                             <br/>
 
                             <div className="flex items-center gap-4">
-                                <Button className="btn-org btn-lg w-[100px]">Save</Button>
-                                 <Button className="btn-org btn-border btn-lg w-[100px]">Cancel</Button>
+                                <Button 
+                                    className="btn-org btn-lg w-[100px]" 
+                                    onClick={handleSave}
+                                    disabled={loading}
+                                >
+                                    {loading ? 'Updating...' : 'Update'}
+                                </Button>
+                                <Button 
+                                    className="btn-org btn-border btn-lg w-[100px]"
+                                    onClick={fetchUserDetails}
+                                >
+                                    Cancel
+                                </Button>
                             </div>
-
                         </form>
                     </div>
                 </div>
