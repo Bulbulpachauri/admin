@@ -87,7 +87,7 @@ const Login = () => {
         context.setIsLogin(true);
         context.alertBox("success", "Login successful!");
         setIsLoading(false);
-        history('/');
+        history('/dashboard');
       } else {
         context.alertBox("error", res?.message || "Login failed");
         setIsLoading(false);

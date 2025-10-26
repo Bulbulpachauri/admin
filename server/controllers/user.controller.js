@@ -481,7 +481,6 @@ export async function verifyForgotPasswordOtp(request, response) {
 export async function resetPassword(request, response) {
     try {
         const {email, newPassword, confirmPassword} = request.body;
-
         if(!email || !newPassword || !confirmPassword){
             return response.status(400).json({
                 message: "Provide required fields email, newPassword, confirmPassword.",

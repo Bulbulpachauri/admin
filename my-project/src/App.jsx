@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { BrowserRouter, Routes, Route, } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import "./App.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -24,6 +24,8 @@ import Checkout from "./Pages/Checkout/index.jsx";
 import MyAccount from "./Pages/MyAccount/index.jsx";
 import Orders from "./Pages/Orders/index.jsx";
 import Logout from "./Pages/Logout/index.jsx";
+import Dashboard from "./Pages/Dashboard/index.jsx";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import toast, { Toaster } from 'react-hot-toast';
 
@@ -88,19 +90,21 @@ function App() {
         <MyContext.Provider value={value}>
           <Header />
           <Routes>
-            <Route path={"/"} exact={true} element={<Home />} />
-            <Route path={"/productListing"} exact={true} element={<ProductListing />} />
-            <Route path={"/product/:id"} exact={true} element={<ProductDetails />} />
-            <Route path={"/Login"} exact={true} element={<Login />} />
-            <Route path={"/register"} exact={true} element={<Register />} />
-            <Route path={"/cart"} exact={true} element={<CartPage />} />
-            <Route path={"/verify"} exact={true} element={<Verify />} />
-            <Route path={"/forgot-password"} exact={true} element={<ForgotPassword />} />
-            <Route path={"/checkout"} exact={true} element={<Checkout />} />
-            <Route path={"/my-account"} exact={true} element={<MyAccount />} />
-            <Route path={"/my-list"} exact={true} element={<MyList />} />
-            <Route path={"/my-orders"} exact={true} element={<Orders />} />
-            <Route path={"/logout"} exact={true} element={<Logout />} />
+            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="/verify" element={<Verify />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+            <Route path="/productListing" element={<ProtectedRoute><ProductListing /></ProtectedRoute>} />
+            <Route path="/product/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
+            <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
+            <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
+            <Route path="/my-account" element={<ProtectedRoute><MyAccount /></ProtectedRoute>} />
+            <Route path="/my-list" element={<ProtectedRoute><MyList /></ProtectedRoute>} />
+            <Route path="/my-orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+            <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
           </Routes>
           <Footer />
         </MyContext.Provider>
