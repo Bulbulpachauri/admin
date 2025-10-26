@@ -16,7 +16,6 @@ const Sidebar = () => {
   const [isOpenAvailFilter, setisOpenAvailFilter] = useState(true);
   const [isOpenSizeFilter, setisOpenSizeFilter] = useState(true);
 
-
   return (
     <aside className="sidebar py-5">
       <div className="box">
