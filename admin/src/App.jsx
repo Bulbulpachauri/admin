@@ -31,18 +31,14 @@ import ForgotPassword from './Pages/ForgotPassword';
 import VerifyAccount from './Pages/VerifyAccount/index.jsx';
 import ChangePassword from './Pages/ChangePassword';
 
-
-
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
-
 
 function App() {
   const [isSidebarOpen,setSidebarOpen] = useState(true);
   const [isLogin,setIsLogin] = useState(false);
 
-  // Check if user is logged in on app load
   useEffect(() => {
     const token = localStorage.getItem('accessToken');
     if (token) {
@@ -50,7 +46,6 @@ function App() {
     }
   }, []);
 
-  // Protected Route Component
   const ProtectedRoute = ({ children }) => {
     const token = localStorage.getItem('accessToken');
     return token ? children : <Navigate to="/login" replace />;
@@ -61,17 +56,9 @@ function App() {
     model:'',
   });
 
-  const handleClose = () => {
-    setIsOpenFullScreenPanel({
-      open:false,
-      model:'',
-    });
-  };
-
   const router = createBrowserRouter([
     {
       path: '/',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -89,53 +76,19 @@ function App() {
       ),
     },
     {
-      path: '/Login',
-      exact:true,
-      element:(
-        <>
-        <Login />
-        </>
-      ),
-    },
-    {
       path: '/login',
-      exact:true,
-      element:(
-        <>
-        <Login />
-        </>
-      ),
+      element: <Login />
     },
     {
       path: '/sign-in',
-      exact:true,
-      element:(
-        <>
-        <Login />
-        </>
-      ),
-    },
-    {
-      path: '/signin',
-      exact:true,
-      element:(
-        <>
-        <Login />
-        </>
-      ),
+      element: <Login />
     },
     {
       path: '/sign-up',
-      exact:true,
-      element:(
-        <>
-        <SignUp />
-        </>
-      ),
+      element: <SignUp />
     },
     {
       path: '/products',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -154,7 +107,6 @@ function App() {
     },
     {
       path: '/homeSlider/list',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -173,7 +125,6 @@ function App() {
     },
      {
       path: '/category/list',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -192,7 +143,6 @@ function App() {
     },
     {
       path: '/product/upload',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -211,7 +161,6 @@ function App() {
     },
     {
       path: '/home-slider',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -230,7 +179,6 @@ function App() {
     },
     {
       path: '/categories',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -249,7 +197,6 @@ function App() {
     },
     {
       path: '/product/:id/edit',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -268,7 +215,6 @@ function App() {
     },
     {
       path: '/home-slider/add',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -287,7 +233,6 @@ function App() {
     },
     {
       path: '/categories/add',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -306,34 +251,18 @@ function App() {
     },
     {
       path: '/forgot-password',
-      exact:true,
-      element:(
-        <>
-        <ForgotPassword />
-        </>
-      ),
+      element: <ForgotPassword />
     },
     {
       path: '/verify-account',
-      exact:true,
-      element:(
-        <>
-        <VerifyAccount />
-        </>
-      ),
+      element: <VerifyAccount />
     },
     {
       path: '/change-password',
-      exact:true,
-      element:(
-        <>
-        <ChangePassword />
-        </>
-      ),
+      element: <ChangePassword />
     },
     {
       path: '/categories/subCat',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -352,7 +281,6 @@ function App() {
     },
     {
       path: '/categories/subCat/add',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -371,7 +299,6 @@ function App() {
     },
     {
       path: '/users',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
@@ -390,7 +317,6 @@ function App() {
     },
     {
       path: '/orders',
-      exact:true,
       element:(
         <ProtectedRoute>
           <section className='main'>
