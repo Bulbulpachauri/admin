@@ -2,15 +2,21 @@ import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 import { Link, NavLink } from 'react-router-dom';
 import { CgLogIn } from "react-icons/cg";
-import { FaRegUser } from 'react-icons/fa6';
+import { FaRegUser, FaRegEye, FaEyeSlash } from 'react-icons/fa6';
 
 const ForgotPassword = () => {
-  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Add your password reset logic here
-    console.log('Reset password for:', email);
+    if (password !== confirmPassword) {
+      alert('Passwords do not match!');
+      return;
+    }
+    console.log('Reset password:', { password });
   };
 
   return (
@@ -49,17 +55,35 @@ const ForgotPassword = () => {
 
         <form onSubmit={handleSubmit}>
           <div className='form-group mb-4 w-full'>
-            <label className='text-sm font-medium mb-1 block' htmlFor="email">Email</label>
-            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)}
-              className='w-full h-12 border border-gray-200 rounded-md focus:border-gray-400 focus:outline-none px-3' placeholder='Enter your email' />
+            <label className='text-sm font-medium mb-1 block' htmlFor="password">New Password</label>
+            <div className='relative w-full'>
+              <input type={showPassword ? "text" : "password"} id="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                className='w-full h-12 border border-gray-200 rounded-md focus:border-gray-400 focus:outline-none px-3' placeholder='Enter new password' required />
+              <Button type="button" className='!absolute top-1/2 -translate-y-1/2 right-2 z-10 !rounded-full !w-9 !h-9 !min-w-0 !text-gray-600'
+                onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? <FaEyeSlash className='text-base' /> : <FaRegEye className='text-base' />}
+              </Button>
+            </div>
           </div>
 
-          <Button className='btn-blue btn-lg w-full'>Reset Password</Button>
+          <div className='form-group mb-4 w-full'>
+            <label className='text-sm font-medium mb-1 block' htmlFor="confirmPassword">Confirm Password</label>
+            <div className='relative w-full'>
+              <input type={showConfirmPassword ? "text" : "password"} id="confirmPassword" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)}
+                className='w-full h-12 border border-gray-200 rounded-md focus:border-gray-400 focus:outline-none px-3' placeholder='Confirm new password' required />
+              <Button type="button" className='!absolute top-1/2 -translate-y-1/2 right-2 z-10 !rounded-full !w-9 !h-9 !min-w-0 !text-gray-600'
+                onClick={() => setShowConfirmPassword(!showConfirmPassword)}>
+                {showConfirmPassword ? <FaEyeSlash className='text-base' /> : <FaRegEye className='text-base' />}
+              </Button>
+            </div>
+          </div>
+
+          <Button type="submit" className='btn-blue btn-lg w-full'>Reset Password</Button>
 
           <br /><br/>
           <div className='text-center flex item-center justify-center gap-4'>
             <span>Don't want to reset? </span>
-            <Link to="/sign-in" className='text-blue-600 font-[700] hover:underline hover:text-gray-700'>Sign In?</Link>
+            <Link to="/login" className='text-blue-600 font-[700] hover:underline hover:text-gray-700'>Sign In?</Link>
           </div>
 
         </form>

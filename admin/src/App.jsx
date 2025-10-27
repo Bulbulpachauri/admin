@@ -30,6 +30,7 @@ import Order from './Pages/Orders';
 import ForgotPassword from './Pages/ForgotPassword';
 import VerifyAccount from './Pages/VerifyAccount/index.jsx';
 import ChangePassword from './Pages/ChangePassword';
+import ResetPassword from './Pages/ResetPassword';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -260,6 +261,10 @@ function App() {
     {
       path: '/change-password',
       element: <ChangePassword />
+    },
+    {
+      path: '/reset-password',
+      element: <ResetPassword />
     },
     {
       path: '/categories/subCat',
