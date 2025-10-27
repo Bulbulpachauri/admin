@@ -32,7 +32,7 @@ export const CategoryCollapse = () => {
     <div className="scroll">
         <ul className="w-full">
           <li className="list-none flex items-center relative flex-col">
-            <Link to="/" className="w-full">
+            <Link to="/category/fashion" className="w-full">
               <Button className="w-full !text-left !justify-start !px-3 !text-[rgba(0,0,0,0.8)]">
                 Fashion
               </Button>
@@ -54,7 +54,7 @@ export const CategoryCollapse = () => {
             {submenuIndex === 0 && (
               <ul className="submenu w-full pl-3">
                 <li className="list-none relative">
-                  <Link to="/" className="w-full" >
+                  <Link to="/category/apparel" className="w-full" >
                     <Button className="w-full !text-left !justify-start !px-3 !text-[rgba(0,0,0,0.8)]">
                       Apparel
                     </Button>
@@ -77,25 +77,25 @@ export const CategoryCollapse = () => {
                   {innerSubmenuIndex === 0 && (
                     <ul className="inner_submenu w-full pl-3">
                       <li className="list-none relative mb-1">
-                        <Link to="/" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
+                        <Link to="/category/smart-table" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
                           Smart Table
                         </Link>
                       </li>
 
                       <li className="list-none relative mb-1">
-                        <Link to="/" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
+                        <Link to="/category/crepe-t-shirt" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
                           Crepe T-Shirt
                         </Link>
                       </li>
 
                       <li className="list-none relative mb-1">
-                        <Link to="/" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
+                        <Link to="/category/leather-watch" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
                           Leather Watch
                         </Link>
                       </li>
 
                       <li className="list-none relative mb-1">
-                        <Link to="/" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
+                        <Link to="/category/rolling-diamond" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
                           Rolling Diamond
                         </Link>
                       </li>
@@ -109,7 +109,7 @@ export const CategoryCollapse = () => {
 
 
           <li className="list-none flex items-center relative flex-col">
-            <Link to="/" className="w-full">
+            <Link to="/category/footwear" className="w-full">
               <Button className="w-full !text-left !justify-start !px-3 !text-[rgba(0,0,0,0.8)]">
                 Footwear
               </Button>
@@ -131,7 +131,7 @@ export const CategoryCollapse = () => {
             {submenuIndex === 2 && (
               <ul className="submenu w-full pl-3">
                 <li className="list-none relative">
-                  <Link to="/" className="w-full" >
+                  <Link to="/category/leather-watch-footwear" className="w-full" >
                     <Button className="w-full !text-left !justify-start !px-3 !text-[rgba(0,0,0,0.8)]">
                       Leather Watch
                     </Button>
@@ -153,25 +153,25 @@ export const CategoryCollapse = () => {
                   {innerSubmenuIndex === 2 && (
                     <ul className="inner_submenu w-full pl-3">
                       <li className="list-none relative mb-1">
-                        <Link to="/" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
+                        <Link to="/category/cabinet-table" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
                           Cabinet Table
                         </Link>
                       </li>
 
                       <li className="list-none relative mb-1">
-                        <Link to="/" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
+                        <Link to="/category/headphones" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
                           Headphones
                         </Link>
                       </li>
 
                       <li className="list-none relative mb-1">
-                        <Link to="/" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
+                        <Link to="/category/sunglasses" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
                           Sunglasses
                         </Link>
                       </li>
 
                       <li className="list-none relative mb-1">
-                        <Link to="/" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
+                        <Link to="/category/rolling-diamond-footwear" className="link w-full !text-left !justify-start !px-3 transition text-[14px]">
                           Rolling Diamond
                         </Link>
                       </li>

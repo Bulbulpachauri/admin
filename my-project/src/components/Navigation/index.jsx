@@ -31,79 +31,79 @@ const Navigation = () => {
           <div className="col_2 w-[60%]">
             <ul className="flex items-center gap-3 nav">
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500] block" >
+                <Link to="/home" className="link transition text-[14px] font-[500] block" >
                   Home
                 </Link>
               </li>
               <li className="list-none relative">
-                <Link to="/" className="link transition text-[14px] font-[500] block" >
+                <Link to="/category/fashion" className="link transition text-[14px] font-[500] block" >
                   Fashion
                 </Link>
 
                 <div className="submenu absolute top-[120%] left-[0%] min-w-[150px] bg-white shadow-md opacity-0 transition-all">
                   <ul>
                     <li className="list-none w-full relative">
-                      <Link to="/" className="w-full block p-2 text-left">
+                      <Link to="/category/men" className="w-full block p-2 text-left">
                         Men
                       </Link>
                         <div className="submenu absolute top-[0%] left-[100%] min-w-[150px] bg-white shadow-md opacity-0 transition-all">
                           <ul>
                             <li className="list-none w-full">
-                              <Link to="/" className="w-full block p-2">T-Shirt</Link>
+                              <Link to="/category/t-shirt" className="w-full block p-2">T-Shirt</Link>
                             </li>
                             <li className="list-none w-full">
-                              <Link to="/" className="w-full block p-2">Jeans</Link>
+                              <Link to="/category/jeans" className="w-full block p-2">Jeans</Link>
                             </li>
                             <li className="list-none w-full">
-                              <Link to="/" className="w-full block p-2">Footwear</Link>
+                              <Link to="/category/footwear" className="w-full block p-2">Footwear</Link>
                             </li>
                             <li className="list-none w-full">
-                              <Link to="/" className="w-full block p-2">Watch</Link>
+                              <Link to="/category/watch" className="w-full block p-2">Watch</Link>
                             </li>
                           </ul>
                         </div>
                     </li>
                     <li className="list-none w-full">
-                      <Link to="/" className="w-full block p-2">Women</Link>
+                      <Link to="/category/women" className="w-full block p-2">Women</Link>
                     </li>
                     <li className="list-none w-full">
-                      <Link to="/" className="w-full block p-2">Kids</Link>
+                      <Link to="/category/kids" className="w-full block p-2">Kids</Link>
                     </li>
                     <li className="list-none w-full">
-                      <Link to="/" className="w-full block p-2">Girls</Link>
+                      <Link to="/category/girls" className="w-full block p-2">Girls</Link>
                     </li>
                     <li className="list-none w-full">
-                      <Link to="/" className="w-full block p-2">Boys</Link>
+                      <Link to="/category/boys" className="w-full block p-2">Boys</Link>
                     </li>
                   </ul>
                 </div>
               </li>
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Electronics</Link>
+                <Link to="/category/electronics" className="link transition text-[14px] font-[500] block py-4" >Electronics</Link>
               </li>
               
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Bag</Link>
+                <Link to="/category/bag" className="link transition text-[14px] font-[500] block py-4" >Bag</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Footwear</Link>
+                <Link to="/category/footwear" className="link transition text-[14px] font-[500] block py-4" >Footwear</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Groceries</Link>
+                <Link to="/category/groceries" className="link transition text-[14px] font-[500] block py-4" >Groceries</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Beauty</Link>
+                <Link to="/category/beauty" className="link transition text-[14px] font-[500] block py-4" >Beauty</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Wellness</Link>
+                <Link to="/category/wellness" className="link transition text-[14px] font-[500] block py-4" >Wellness</Link>
               </li>
 
               <li className="list-none">
-                <Link to="/" className="link transition text-[14px] font-[500] block py-4" >Jewellery</Link>
+                <Link to="/category/jewellery" className="link transition text-[14px] font-[500] block py-4" >Jewellery</Link>
               </li>
 
             </ul>

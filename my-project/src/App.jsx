@@ -90,7 +90,7 @@ function App() {
         <MyContext.Provider value={value}>
           <Header />
           <Routes>
-            <Route path="/" element={<Navigate to="/login" replace />} />
+            <Route path="/" element={<Navigate to="/home" replace />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/sign-up" element={<Register />} />
@@ -99,6 +99,7 @@ function App() {
             <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
             <Route path="/productListing" element={<ProtectedRoute><ProductListing /></ProtectedRoute>} />
+            <Route path="/category/:categoryName" element={<ProtectedRoute><ProductListing /></ProtectedRoute>} />
             <Route path="/product/:id" element={<ProtectedRoute><ProductDetails /></ProtectedRoute>} />
             <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
             <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />

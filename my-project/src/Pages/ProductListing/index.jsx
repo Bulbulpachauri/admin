@@ -1,4 +1,5 @@
 import React, { useState } from "react"
+import { useParams } from "react-router-dom";
 import Sidebar from "../../components/Sidebar";
 import Typography from "@mui/material/Typography";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -12,22 +13,22 @@ import Pagination from '@mui/material/Pagination';
 
 const ProductListing = () => {
   const [itemView, setItemView] = useState('grid');
+  const { categoryName } = useParams();
+  
+  // Capitalize first letter of category name for display
+  const displayCategoryName = categoryName ? 
+    categoryName.charAt(0).toUpperCase() + categoryName.slice(1) : 'All Products';
 
   return (
     <section className="py-5 pb-0">
       <div className="container">
         <Breadcrumbs aria-label="breadcrumb">
-          <Link underline="hover" color="inherit" href="/" className="link transition">
+          <Link underline="hover" color="inherit" href="/home" className="link transition">
             Home
           </Link>
-          <Link
-            underline="hover"
-            color="inherit"
-            href="/"
-            className="link transition"
-          >
-            Fashion
-          </Link>
+          <Typography color="text.primary">
+            {displayCategoryName}
+          </Typography>
         </Breadcrumbs>
       </div>
 
