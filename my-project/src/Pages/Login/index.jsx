@@ -38,7 +38,7 @@ const Login = () => {
             }).then((res)=>{
               if(res?.error === false){
                 context.alertBox("success", res?.message);
-                history("/verify");
+                history("/verify-account");
               }else{
                 context.alertBox("error", res?.message);
               }
@@ -155,7 +155,7 @@ const Login = () => {
               </Button>
             </div>
 
-            <p className="text-center">Not Registered? <Link className="link text-[14px] font-[600]" to="/register">Sing Up</Link></p>
+            <p className="text-center">Not Registered? <Link className="link text-[14px] font-[600]" to="/sign-up">Sing Up</Link></p>
 
 
             <p className="text-center font-[500]">Or continue with social account</p>

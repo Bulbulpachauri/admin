@@ -75,7 +75,7 @@ const Register = () => {
           phone: ""
         })
 
-        history("/verify")
+        history("/verify-account")
       }else{
         context.alertBox(res?.message, "error");
       }

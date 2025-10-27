@@ -1,11 +1,11 @@
 import './App.css';
 import React from 'react';
-import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import {createBrowserRouter, RouterProvider, Navigate} from 'react-router-dom';
 import toast, { Toaster } from 'react-hot-toast';
 import Dashboard from './Pages/Dashboard';
 import Header from './Components/Sidebar/Header';
 import Sidebar from './Components/Sidebar';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Login from './Pages/Dashboard/Login';
 import SignUp from './Pages/SignUp';
 import { MyContext } from './context/MyContext';
@@ -42,6 +42,20 @@ function App() {
   const [isSidebarOpen,setSidebarOpen] = useState(true);
   const [isLogin,setIsLogin] = useState(false);
 
+  // Check if user is logged in on app load
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      setIsLogin(true);
+    }
+  }, []);
+
+  // Protected Route Component
+  const ProtectedRoute = ({ children }) => {
+    const token = localStorage.getItem('accessToken');
+    return token ? children : <Navigate to="/login" replace />;
+  };
+
   const [isOpenFullScreenPanel,setIsOpenFullScreenPanel] = useState({
     open:false,
     model:'',
@@ -59,7 +73,7 @@ function App() {
       path: '/',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -71,7 +85,7 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
@@ -123,7 +137,7 @@ function App() {
       path: '/products',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -135,14 +149,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/homeSlider/list',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -154,14 +168,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
      {
       path: '/category/list',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -173,14 +187,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/product/upload',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -192,14 +206,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/home-slider',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -211,14 +225,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/categories',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -230,14 +244,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/product/:id/edit',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -249,14 +263,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/home-slider/add',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -268,14 +282,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/categories/add',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -287,26 +301,7 @@ function App() {
               </div>
             </div>
           </section>
-        </>
-      ),
-    },
-    {
-      path: '/categories/add',
-      exact:true,
-      element:(
-        <>
-          <section className='main'>
-            <Header/>
-            <div className="contentMain flex">
-              <div className={`overflow-hidden sidebarWrapper ${isSidebarOpen===true ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
-                <Sidebar/>
-              </div>
-              <div className={`contentRight py-4 px-5 ${isSidebarOpen===false ? 'w-[80%]' : 'w-[82%]'}`}>
-                <AddCategory />
-              </div>
-            </div>
-          </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
@@ -340,7 +335,7 @@ function App() {
       path: '/categories/subCat',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -352,14 +347,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/categories/subCat/add',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -371,14 +366,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/users',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -390,14 +385,14 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
     {
       path: '/orders',
       exact:true,
       element:(
-        <>
+        <ProtectedRoute>
           <section className='main'>
             <Header/>
             <div className="contentMain flex">
@@ -409,7 +404,7 @@ function App() {
               </div>
             </div>
           </section>
-        </>
+        </ProtectedRoute>
       ),
     },
   ]);
@@ -423,6 +418,13 @@ function App() {
     }
   };
 
+  const logout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    setIsLogin(false);
+    alertBox('success', 'Logged out successfully');
+  };
+
   const values = {
     isSidebarOpen,
     setSidebarOpen,
@@ -431,6 +433,7 @@ function App() {
     isOpenFullScreenPanel,
     setIsOpenFullScreenPanel,
     alertBox,
+    logout,
   }
 
   return (

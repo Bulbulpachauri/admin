@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from '@mui/material/Button';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { CgLogIn } from "react-icons/cg";
 import { FaRegUser } from 'react-icons/fa6';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -9,6 +9,7 @@ import { BsFacebook } from 'react-icons/bs';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { FaRegEye, FaEyeSlash } from 'react-icons/fa';
+import { MyContext } from '../../../context/MyContext';
 
 const Login = () => {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
@@ -16,6 +17,10 @@ const Login = () => {
   const [isPasswordShow, setIsPasswordShow] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  
+  const context = useContext(MyContext);
+  const navigate = useNavigate();
 
   function handleClickGoogle() {
     setLoadingGoogle(true);
@@ -25,9 +30,43 @@ const Login = () => {
     setLoadingFb(true);
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({ email, password });
+    
+    if (!email || !password) {
+      context.alertBox('error', 'Please fill all fields');
+      return;
+    }
+
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch('http://localhost:8000/api/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        localStorage.setItem('accessToken', data.data.accessToken);
+        localStorage.setItem('refreshToken', data.data.refreshToken);
+        context.setIsLogin(true);
+        context.alertBox('success', 'Login successful!');
+        navigate('/');
+      } else {
+        context.alertBox('error', data.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      context.alertBox('error', 'Network error. Please try again.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -120,7 +159,14 @@ const Login = () => {
             </Link>
           </div>
 
-          <Button type="submit" variant="contained" className='!bg-blue-600 !text-white !py-3 !text-base !font-bold w-full !normal-case'>Log In</Button>
+          <LoadingButton 
+            type="submit" 
+            loading={isLoading}
+            variant="contained" 
+            className='!bg-blue-600 !text-white !py-3 !text-base !font-bold w-full !normal-case'
+          >
+            {isLoading ? 'Logging in...' : 'Log In'}
+          </LoadingButton>
         </form>
       </div>
     </section>

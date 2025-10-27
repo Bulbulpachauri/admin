@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import "../ProductItem/style.css";
 import { Link } from "react-router-dom";
 import Rating from '@mui/material/Rating';
@@ -7,8 +7,10 @@ import { FaRegHeart } from "react-icons/fa6";
 import { IoGitCompareOutline } from "react-icons/io5";
 import { MdZoomOutMap } from "react-icons/md";
 import { MdOutlineShoppingCart } from "react-icons/md";
+import { MyContext } from "../../App";
 
 const ProductItem = () => {
+  const context = useContext(MyContext);
      
   return (
     <div className="ProductItem shadow-lg rounded-md overflow-hidden border-1 border-[rgba(0,0,0,0.1)] flex items-center gap-3">
@@ -31,7 +33,7 @@ const ProductItem = () => {
             <span className="discount flex items-center absolute top-[10px] left-[10px] z-50 bg-blue-500 text-white rounded-md p-2 text-[12px] font-[500]">10%</span>
 
             <div className="actions absolute top-[-200px] right-[15px] z-50 flex item-center gap-2 flex-col w-[50px] transition-all duration-300 group-hover:top-[15px] opacity-0 group-hover:opacity-100">
-                <Button className="!w-[40px] !h-[40px] !min-w-[40px] !rounded-full !bg-white text-black hover:!bg-blue-500 hover:text-white group"onClick={()=>context.setOpenProductDetailsModal(true)}>
+                <Button className="!w-[40px] !h-[40px] !min-w-[40px] !rounded-full !bg-white text-black hover:!bg-blue-500 hover:text-white group" onClick={()=>context.setOpenProductDetailsModal(true)}>
                   <MdZoomOutMap className="text-[18px] !text-black group-hover:text-white hover:!text-white"/>
                   </Button>
 

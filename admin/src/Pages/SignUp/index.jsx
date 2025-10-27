@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Button from '@mui/material/Button';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { CgLogIn } from "react-icons/cg";
 import { FaRegUser } from 'react-icons/fa6';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -9,14 +9,22 @@ import { BsFacebook } from 'react-icons/bs';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { FaRegEye, FaEyeSlash } from 'react-icons/fa';
+import { MyContext } from '../../context/MyContext';
+import { postData } from '../../utils/api';
+import CircularProgress from '@mui/material/CircularProgress';
 
 const SignUp = () => {
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [loadingFb, setLoadingFb] = useState(false);
   const [isPasswordShow, setIsPasswordShow] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [phone, setPhone] = useState('');
+  
+  const context = useContext(MyContext);
+  const navigate = useNavigate();
 
   function handleClickGoogle() {
     setLoadingGoogle(true);
@@ -28,7 +36,32 @@ const SignUp = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log({ name, email, password });
+    
+    if (!name || !email || !password || !phone) {
+      context.alertBox('error', 'Please fill all fields');
+      return;
+    }
+    
+    setIsLoading(true);
+    
+    postData('/api/user/register', {
+      name,
+      email,
+      password,
+      phone
+    }).then((res) => {
+      setIsLoading(false);
+      if (res?.success === true) {
+        context.alertBox('success', res?.message);
+        localStorage.setItem('userEmail', email);
+        navigate('/verify-account');
+      } else {
+        context.alertBox('error', res?.message || 'Registration failed');
+      }
+    }).catch((error) => {
+      setIsLoading(false);
+      context.alertBox('error', 'Registration failed. Please try again.');
+    });
   };
 
   return (
@@ -39,18 +72,20 @@ const SignUp = () => {
         </Link>
 
         <div className='flex items-center gap-2'>
-          <NavLink to="/login" exact={true} activeClassName="isActive">
-              {({ isActive }) => (
+          <NavLink to="/login">
+            {({ isActive }) => (
               <Button className={`!rounded-full !px-5 flex gap-2 ${isActive ? '!text-blue-600 !font-semibold' : '!text-gray-700'}`}>
                 <CgLogIn className="text-lg" /> Login
               </Button>
             )}
           </NavLink>
 
-          <NavLink to="/sign-up" exact={true} activeClassName="isActive">
-             <Button className='!rounded-full !text-gray-700 !px-5 flex gap-2'>
+          <NavLink to="/sign-up">
+            {({ isActive }) => (
+              <Button className={`!rounded-full !px-5 flex gap-2 ${isActive ? '!text-blue-600 !font-semibold' : '!text-gray-700'}`}>
                 <FaRegUser className="text-base" /> Sign Up
               </Button>
+            )}
           </NavLink>
         </div>
       </header>
@@ -87,7 +122,7 @@ const SignUp = () => {
 
         <div className='flex w-full items-center justify-center gap-3 my-6'>
           <span className='flex-grow h-[1px] bg-gray-200'></span>
-          <span className='text-sm font-medium text-gray-500'>Or, Sign In With Your Email</span>
+          <span className='text-sm font-medium text-gray-500'>Or, Sign Up With Your Email</span>
           <span className='flex-grow h-[1px] bg-gray-200'></span>
         </div>
 
@@ -101,6 +136,12 @@ const SignUp = () => {
           <div className='form-group mb-4 w-full'>
             <label className='text-sm font-medium mb-1 block' htmlFor="email">Email Address</label>
             <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)}
+            className='w-full h-12 border border-gray-200 rounded-md focus:border-gray-400 focus:outline-none px-3' required/>
+          </div>
+
+          <div className='form-group mb-4 w-full'>
+            <label className='text-sm font-medium mb-1 block' htmlFor="phone">Phone Number</label>
+            <input type="tel" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)}
             className='w-full h-12 border border-gray-200 rounded-md focus:border-gray-400 focus:outline-none px-3' required/>
           </div>
 
@@ -126,7 +167,19 @@ const SignUp = () => {
             </Link>
           </div>
 
-          <Button type="submit" variant="contained" className='!bg-blue-600 !text-white !py-3 !text-base !font-bold w-full !normal-case'>Sign In</Button>
+          <Button 
+            type="submit" 
+            variant="contained" 
+            disabled={isLoading}
+            className='!bg-blue-600 !text-white !py-3 !text-base !font-bold w-full !normal-case'
+          >
+            {isLoading ? (
+              <>
+                <CircularProgress color="inherit" size={20} />
+                <span className="ml-2">Signing Up...</span>
+              </>
+            ) : 'Sign Up'}
+          </Button>
         </form>
       </div>
     </section>
