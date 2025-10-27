@@ -1,6 +1,7 @@
 import './App.css';
 import React from 'react';
 import {createBrowserRouter, RouterProvider} from 'react-router-dom';
+import toast, { Toaster } from 'react-hot-toast';
 import Dashboard from './Pages/Dashboard';
 import Header from './Components/Sidebar/Header';
 import Sidebar from './Components/Sidebar';
@@ -83,7 +84,25 @@ function App() {
       ),
     },
     {
+      path: '/login',
+      exact:true,
+      element:(
+        <>
+        <Login />
+        </>
+      ),
+    },
+    {
       path: '/sign-in',
+      exact:true,
+      element:(
+        <>
+        <Login />
+        </>
+      ),
+    },
+    {
+      path: '/signin',
       exact:true,
       element:(
         <>
@@ -395,6 +414,15 @@ function App() {
     },
   ]);
 
+  const alertBox = (type, msg) => {
+    if (type === "success") {
+      toast.success(msg);
+    }
+    if (type === "error") {
+      toast.error(msg);
+    }
+  };
+
   const values = {
     isSidebarOpen,
     setSidebarOpen,
@@ -402,6 +430,7 @@ function App() {
     setIsLogin,
     isOpenFullScreenPanel,
     setIsOpenFullScreenPanel,
+    alertBox,
   }
 
   return (
@@ -458,6 +487,7 @@ function App() {
             
       </Dialog>
 
+      <Toaster />
     </MyContext.Provider>
   );
 };
