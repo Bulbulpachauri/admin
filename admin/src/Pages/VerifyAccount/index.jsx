@@ -10,17 +10,18 @@ const VerifyAccount = () => {
   const [otp, setOtp] = useState('');
 
   const handleOtpSubmit = (otpValue) => {
-    // Simulate OTP verification (replace with actual API call)
-    if (otpValue === '123456') {
-      alert('OTP Verified Successfully!');
-      // navigate('/dashboard'); // Redirect to dashboard
-    } else {
-      alert('Invalid OTP. Please try again.');
+    setOtp(otpValue);
+    
+    // Only validate when complete 6-digit OTP is entered
+    if (otpValue.length === 6) {
+      // Simulate OTP verification (replace with actual API call)
+      if (otpValue === '123456') {
+        alert('OTP Verified Successfully!');
+        // navigate('/dashboard'); // Redirect to dashboard
+      } else {
+        alert('Invalid OTP. Please try again.');
+      }
     }
-  };
-
-  const handleVerifyClick = () => {
-    handleOtpSubmit(otp);
   };
 
   return (
@@ -63,18 +64,22 @@ const VerifyAccount = () => {
         <p className='text-center text-[15px]'>OTP send to &nbsp;
           <span className='text-blue-600 font-bold'> bulbulpachauri21@gmail.com</span>
         </p>
+        
+        <p className='text-center text-sm text-green-600 font-semibold mt-2'>
+          Valid OTP: 123456
+        </p>
 
         <br />
 
 
         <div className="text-center flex item-center justify-center flex-col">
-          <OtpBox onSubmit={setOtp} />
+          <OtpBox onSubmit={handleOtpSubmit} />
         </div>
 
         <br/>
 
         <div className="w-[300px] m-auto">
-          <Button className='btn-blue w-full' onClick={handleVerifyClick}> Verify OTP</Button>
+          <Button className='btn-blue w-full' onClick={() => handleOtpSubmit(otp)}> Verify OTP</Button>
         </div>
         
 
