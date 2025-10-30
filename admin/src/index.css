@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.btn-org {
+  @apply bg-blue-600 text-white hover:bg-blue-700 transition-colors;
+}
+
+.link {
+  @apply text-blue-600 hover:text-blue-800 transition-colors;
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-md;
+}
+
+.section {
+  @apply min-h-screen;
+}
+
+.container {
+  @apply max-w-7xl mx-auto px-4;
+}

@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import Button from "@mui/material/Button";
 import Badge from '@mui/material/Badge';
 import { styled } from '@mui/material/styles';
@@ -104,10 +105,14 @@ const Header = () => {
                 </div>
               </MenuItem>
               <Divider />
+
+              <Link to="/profile">
               <MenuItem onClick={handleCloseMyAcc} className="flex items-center gap-3">
                 <FaRegUser className="text-[16px]" />
                 <span className="text-[16px]">Profile</span>
               </MenuItem>
+              </Link>
+
               <MenuItem onClick={handleCloseMyAcc} className="flex items-center gap-3">
                 <IoMdLogOut className="text-[16px]" />
                 <span className="text-[16px]">Sign Out</span>
