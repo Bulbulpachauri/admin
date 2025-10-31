@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { MyContext } from "../../context/MyContext";
 import { CircularProgress, Button, TextField } from "@mui/material";
 import { FaUpload } from "react-icons/fa";
-import { fetchData, editData } from "../../utils/api";
+import { fetchData, editData, postData } from "../../utils/api";
 import { useNavigate } from "react-router-dom";
 import { PhoneInput } from "react-international-phone";
 import "react-international-phone/style.css";
@@ -13,7 +13,13 @@ const Profile = () => {
     const [userDetails, setUserDetails] = useState({});
     const [showChangePassword, setShowChangePassword] = useState(false);
     const [loading, setLoading] = useState(false);
+    const [isLoading2, setIsLoading2] = useState(false);
     const [Phone, setPhone] = useState('+919876543210');
+    const [changePassword, setChangePassword] = useState({
+        oldPassword: '',
+        newPassword: '',
+        confirmPassword: ''
+    });
 
     const context = useContext(MyContext);
     const history = useNavigate();
@@ -86,6 +92,54 @@ const Profile = () => {
             context.alertBox("error", "Upload failed.");
         } finally {
             setUploading(false);
+        }
+    };
+
+    const handlePasswordChange = (e) => {
+        const { name, value } = e.target;
+        setChangePassword(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const handleChangePassword = async (e) => {
+        e.preventDefault();
+        
+        if (changePassword.newPassword !== changePassword.confirmPassword) {
+            context.alertBox("error", "New password and confirm password don't match.");
+            return;
+        }
+        
+        if (changePassword.newPassword.length < 6) {
+            context.alertBox("error", "Password must be at least 6 characters long.");
+            return;
+        }
+
+        setIsLoading2(true);
+        try {
+            const response = await editData('/api/user/reset-password', {
+                email: userDetails.email,
+                oldPassword: changePassword.oldPassword,
+                newPassword: changePassword.newPassword,
+                confirmPassword: changePassword.confirmPassword
+            });
+            
+            if (response && response.success) {
+                context.alertBox("success", "Password changed successfully!");
+                setChangePassword({
+                    oldPassword: '',
+                    newPassword: '',
+                    confirmPassword: ''
+                });
+                setShowChangePassword(false);
+            } else {
+                context.alertBox("error", response?.message || "Failed to change password.");
+            }
+        } catch (error) {
+            context.alertBox("error", "Password change failed.");
+        } finally {
+            setIsLoading2(false);
         }
     };
 
@@ -174,7 +228,7 @@ const Profile = () => {
 
                     <div className="flex items-center gap-4">
                         <Button
-                            className="btn-org btn-sm w-[150px]"
+                            className="btn-blue btn-lg w-full"
                             onClick={handleSave}
                             disabled={loading}
                         >
@@ -185,6 +239,76 @@ const Profile = () => {
 
 
             </div>
+
+
+            {showChangePassword && (
+                                <div className="card w-[75%] bg-white p-5 shadow-md rounded-md">
+                                    <div className="flex items-center pb-3">
+                                        <h2 className="text-[18px] font-[600] pb-0">Change Password </h2>
+                                    </div>
+                                    <hr />
+            
+                                    <form className="mt-8">
+                                        <div className="flex items-center gap-5">
+                                            <div className="w-[50%]">
+                                                <TextField
+                                                    label="Old Password"
+                                                    type="password"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    className="w-full"
+                                                    name="oldPassword"
+                                                    value={changePassword.oldPassword}
+                                                    disabled={isLoading2}
+                                                    onChange={handlePasswordChange}
+                                                />
+                                            </div>
+            
+                                            <div className="w-[50%]">
+                                                <TextField
+                                                    label="New Password"
+                                                    type="password"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    className="w-full"
+                                                    name="newPassword"
+                                                    value={changePassword.newPassword}
+                                                    disabled={isLoading2}
+                                                    onChange={handlePasswordChange}
+                                                />
+                                            </div>
+                                        </div>
+            
+                                        <div className="flex items-center mt-4 gap-5">
+                                            <div className="w-[50%]">
+                                                <TextField
+                                                    label="Confirm Password"
+                                                    type="password"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    className="w-full"
+                                                    name="confirmPassword"
+                                                    value={changePassword.confirmPassword}
+                                                    disabled={isLoading2}
+                                                    onChange={handlePasswordChange}
+                                                />
+                                            </div>
+                                        </div>
+            
+                                        <br />
+            
+                                        <div className="flex items-center gap-4">
+                                            <Button
+                                                className="btn-blue btn-lg w-[100%]"
+                                                onClick={handleChangePassword}
+                                                disabled={isLoading2}
+                                            >
+                                                {isLoading2 ? 'Changing...' : 'Change Password'}
+                                            </Button>
+                                        </div>
+                                    </form>
+                                </div>
+                                )}
         </>
     )
 }
