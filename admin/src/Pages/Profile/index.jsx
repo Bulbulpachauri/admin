@@ -224,6 +224,21 @@ const Profile = () => {
                         </div>
                     </div>
 
+                    <br/>
+
+
+                    <div className="flex items-center justify-center p-5 border border-dashed
+                     border-[rgba(0,0,0,0.2)] bg-[#f1faff] hover:bg-[#e7f3f9] cursor-pointer" onClick={()=>context.setIsOpenFullScreenPanel({
+                        open:true,
+                        model:"Add New Address"
+                     })}>
+                        <span className="text-[14px] font-[500]">Add Address</span>
+                    </div>
+
+
+
+
+
                     <br />
 
                     <div className="flex items-center gap-4">

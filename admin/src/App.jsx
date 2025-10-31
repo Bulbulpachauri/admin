@@ -32,6 +32,7 @@ import VerifyAccount from './Pages/VerifyAccount/index.jsx';
 import ChangePassword from './Pages/ChangePassword';
 import ResetPassword from './Pages/ResetPassword';
 import Profile from './Pages/Profile';
+import AddAddress from './Pages/Address/addAddress.jsx';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -436,6 +437,11 @@ function App() {
             {
               isOpenFullScreenPanel?.model==='Add New Sub Category' && 
               <AddSubCategory />     
+            }
+
+             {
+              isOpenFullScreenPanel?.model==='Add New Address' && 
+              <AddAddress />     
             }
             
       </Dialog>

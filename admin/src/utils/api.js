@@ -31,14 +31,26 @@ export const fetchData = async (URL) => {
 
 export const postData = async (URL, formData) => {
     try {
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
+        
         const response = await fetch(apiUrl + URL, {
             method: "POST",
             headers: {
-                'Authorization': `Bearer ${getAuthToken()}`,
+                'Authorization': `Bearer ${token}`,
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(formData)
         });
+
+        if (response.status === 401) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            window.location.href = '/login';
+            return;
+        }
 
         if (response.ok) {
             const data = await response.json();
@@ -104,13 +116,23 @@ export const editData = async (URL, updatedData) => {
 
 export const deleteData = async (URL) => {
     try {
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
+        
         const response = await axios.delete(apiUrl + URL, {
             headers: {
-                'Authorization': `Bearer ${getAuthToken()}`,
+                'Authorization': `Bearer ${token}`,
             }
         });
         return { data: response.data };
     } catch (error) {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+            window.location.href = '/login';
+        }
         console.error("Delete Error:", error);
         throw error;
     }
