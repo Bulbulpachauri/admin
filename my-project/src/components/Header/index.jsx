@@ -104,15 +104,16 @@ const Header = () => {
               </li>
               ) : (
                 <>
-                                <Button className="!text-[#000] myAccountWrap flex item-center gap-3 cursor-pointer" onClick={handleClick}>
-                  <Button className="!w-[40px] !h-[40px] !min-w-[40px] !rounded-full !bg-[#f1f1f1]"><FaRegUser className="!text-[20px] text-[rgba(0,0,0,0.7)]" />
-                  </Button>
+                                <div className="text-[#000] myAccountWrap flex item-center gap-3 cursor-pointer" onClick={handleClick}>
+                  <div className="w-[40px] h-[40px] min-w-[40px] rounded-full bg-[#f1f1f1] flex items-center justify-center">
+                    <FaRegUser className="text-[20px] text-[rgba(0,0,0,0.7)]" />
+                  </div>
 
                   <div className="info flex flex-col ml-3">
                     <h4 className="leading-3text-[14px] text-[rgba(0,0,0,0.6)] font-[500] mb-0 capitalize text-left justify-start">Bulbul Pachauri</h4>
                     <span className="text-[13px] text-[rgba(0,0,0,0.6)] font-[400] capitalize text-left justify-start">bulbulpachauri21@gmail.com</span>
                   </div>
-                   </Button>
+                </div>
 
                 <Menu
         anchorEl={anchorEl}

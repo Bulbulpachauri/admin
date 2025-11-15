@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Link } from "react-router-dom";
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,9 +8,11 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Checkbox from "@mui/material/Checkbox";
-import SearchBox from '../../Components/SearchBox';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import { MyContext } from '../../context/MyContext';
 import {MdOutlineMarkEmailRead, MdPhone, MdCalendarToday} from 'react-icons/md'
+import { fetchDataFromApi } from '../../utils/api'
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -32,30 +34,81 @@ const columns = [
     label: 'CREATED',
     minWidth: 100,
   },
+  {
+    id: 'actions',
+    label: 'ACTIONS',
+    minWidth: 100,
+  },
 ];
 
-// Sample data - in a real app, this would come from an API
-const createData = (userImg, userName, userEmail, userPhone, createdDate) => {
-  return { userImg, userName, userEmail, userPhone, createdDate };
-}
 
-const rows = [
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-23'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-24'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-25'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-26'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-27'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-28'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-29'),
-  createData('https://api.spicezgold.com/download/file_1734526836571_modestouze-attires-women-s-mukaish-worked-ethnic-jacket-with-top-and-pant-set-product-images-rvziicqwq6-1-202403231855.jpg', 'Bulbulpachauri', 'bulbulpachaui21@gmail.com', '+91-8171306923', '2024-03-30'),
-];
 
 
 const Users = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [users, setUsers] = useState([]);
+  const [searchEmail, setSearchEmail] = useState('');
+  const [searchResult, setSearchResult] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const context = useContext(MyContext);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const response = await fetchDataFromApi('/api/user/all-users');
+      if (response && response.success) {
+        setUsers(response.data);
+      }
+    } catch (error) {
+      console.log('Error fetching user details: ', error);
+      if (error.response?.status === 401) {
+        context.alertBox('error', 'Please login to access this page');
+      } else {
+        context.alertBox('error', 'Failed to fetch users');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const searchUser = async () => {
+    if (!searchEmail.trim()) {
+      context.alertBox('error', 'Please enter an email to search');
+      return;
+    }
+    
+    try {
+      setLoading(true);
+      const response = await fetchDataFromApi(`/api/user/search?email=${searchEmail}`);
+      if (response && response.success) {
+        setSearchResult(response.data);
+        context.alertBox('success', 'User found!');
+      }
+    } catch (error) {
+      console.log('Error fetching user details: ', error);
+      setSearchResult(null);
+      if (error.response?.status === 401) {
+        context.alertBox('error', 'Please login to access this page');
+      } else {
+        context.alertBox('error', 'User not found');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const clearSearch = () => {
+    setSearchEmail('');
+    setSearchResult(null);
+  };
+
+  const displayUsers = searchResult ? [searchResult] : users;
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -82,8 +135,16 @@ const Users = () => {
              </div>
             </div>
 
-            <div className="col w-[40%] ml-auto">
-              <SearchBox />
+            <div className="col w-[40%] ml-auto flex gap-2">
+              <TextField
+                size="small"
+                placeholder="Search by email (e.g., user@example.com)"
+                value={searchEmail}
+                onChange={(e) => setSearchEmail(e.target.value)}
+                className="flex-1"
+              />
+              <Button onClick={searchUser} disabled={loading}>Search</Button>
+              <Button onClick={clearSearch} variant="outlined">Clear</Button>
             </div>
 
           </div>
@@ -108,40 +169,48 @@ const Users = () => {
 
               </TableHead>
               <TableBody>
-                {rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row, index) => {
+                {displayUsers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((user, index) => {
                   return (
-                    <TableRow hover role="checkbox" tabIndex={-1} key={index}>
+                    <TableRow hover role="checkbox" tabIndex={-1} key={user._id || index}>
                       <TableCell>
                         <Checkbox {...label} size="small" />
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-4">
                           <div className="img w-[65px] h-[65px] rounded-md overflow-hidden group">
-                            <img src={row.userImg}
-                              className="w-full group-hover:scale-105 transition-all" />
+                            <img src={user.avatar?.secure_url || '/default-avatar.png'}
+                              className="w-full group-hover:scale-105 transition-all" 
+                              onError={(e) => {
+                                e.target.src = '/default-avatar.png';
+                              }}
+                            />
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell>{row.userName}</TableCell>
+                      <TableCell>{user.name}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <MdOutlineMarkEmailRead className="text-primary" />
-                          {row.userEmail}
+                          {user.email}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <MdPhone className="text-primary" />
-                          {row.userPhone}
+                          {user.phone || user.mobile || 'N/A'}
                         </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <MdCalendarToday className="text-primary" />
-                          {row.createdDate}
+                          {new Date(user.createdAt).toLocaleDateString()}
                         </div>
                       </TableCell>
-                     
+                      <TableCell>
+                        <Link to={`/user-details/${user._id}`} className="text-blue-500 hover:text-blue-700 text-sm">
+                          View Details
+                        </Link>
+                      </TableCell>
                     </TableRow>
                   );
                 })}
@@ -151,7 +220,7 @@ const Users = () => {
           <TablePagination
             rowsPerPageOptions={[10, 25, 100]}
             component="div"
-            count={rows.length}
+            count={displayUsers.length}
             rowsPerPage={rowsPerPage}
             page={page}
             onPageChange={handleChangePage}

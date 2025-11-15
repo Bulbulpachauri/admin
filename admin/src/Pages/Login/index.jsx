@@ -82,14 +82,17 @@ const Login = () => {
     postData("/api/user/login", formFields).then((res) => {
       console.log('Login response:', res);
       if(res?.success === true){
+        console.log('Storing tokens:', res.data.accessToken);
         localStorage.setItem("accessToken", res.data.accessToken);
         localStorage.setItem("refreshToken", res.data.refreshToken);
         localStorage.setItem("userEmail", formFields.email);
+        console.log('Token stored:', localStorage.getItem('accessToken'));
         context.setIsLogin(true);
         context.alertBox("success", "Login successful!");
         setIsLoading(false);
         history('/');
       } else {
+        console.log('Login failed:', res);
         context.alertBox("error", res?.message || "Login failed");
         setIsLoading(false);
       }

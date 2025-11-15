@@ -22,9 +22,8 @@ export const fetchData = async (URL) => {
         if (error.response?.status === 401) {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
-            window.location.href = '/login';
         }
-        console.error("Fetch Error:", error);
+        console.error("Error:", error);
         throw error;
     }
 };
@@ -32,6 +31,7 @@ export const fetchData = async (URL) => {
 export const postData = async (URL, formData) => {
     try {
         const token = getAuthToken();
+        console.log('Token being sent:', token);
         if (!token) {
             throw new Error('No authentication token found');
         }
@@ -44,11 +44,12 @@ export const postData = async (URL, formData) => {
             },
             body: JSON.stringify(formData)
         });
+        
+        console.log('Response status:', response.status);
 
         if (response.status === 401) {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
-            window.location.href = '/login';
             return;
         }
 
@@ -107,7 +108,6 @@ export const editData = async (URL, updatedData) => {
         if (error.response?.status === 401) {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
-            window.location.href = '/login';
         }
         console.error("Edit Error:", error);
         throw error;
@@ -131,9 +131,32 @@ export const deleteData = async (URL) => {
         if (error.response?.status === 401) {
             localStorage.removeItem('accessToken');
             localStorage.removeItem('refreshToken');
-            window.location.href = '/login';
         }
         console.error("Delete Error:", error);
+        throw error;
+    }
+}
+
+export const fetchDataFromApi = async (URL) => {
+    try {
+        const token = getAuthToken();
+        console.log('API Error: ');
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
+        
+        const response = await axios.get(apiUrl + URL, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        return response.data;
+    } catch (error) {
+        console.log('API Error: ', error);
+        if (error.response?.status === 401) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+        }
         throw error;
     }
 }

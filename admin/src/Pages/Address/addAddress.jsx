@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { PhoneInput } from "react-international-phone";
@@ -6,7 +6,7 @@ import "react-international-phone/style.css";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { MyContext } from '../../context/MyContext';
-import { postData } from '../../utils/api';
+import { editData, postData } from '../../utils/api';
 
 
 const AddAddress = () => {
@@ -14,6 +14,12 @@ const AddAddress = () => {
     const [phone, setPhone] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [formsFields, setformsFields] = useState({});
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+    useEffect(() => {
+        const token = localStorage.getItem('accessToken');
+        setIsAuthenticated(!!token);
+    }, []);
 
     const [status, setStatus] = useState('false');
 
@@ -24,16 +30,12 @@ const AddAddress = () => {
         pincode: '',
         country: '',
         mobile: '',
-        status: ''
+        status: 'false'
     });
 
     const handleChangeStatus = (event) => {
         setStatus(event.target.value);
     };
-
-
-
-    
 
      const handleFormChange = (e) => {
         const { name, value } = e.target;
@@ -43,74 +45,76 @@ const AddAddress = () => {
         }));
     };
 
-        const handleSave = async (e) => {
-            e.preventDefault();
-            try {
-                setIsLoading(true);
-                
-                if (formFields.address_line1 === "") {
-                    context.alertBox("error", "Please enter Address Line 1.");
-                    return;
-                }
-                if (formFields.city === "") {
-                    context.alertBox("error", "Please enter your City.");
-                    return;
-                }
-                if (formFields.state === "") {
-                    context.alertBox("error", "Please enter your State.");
-                    return;
-                }
-                if (formFields.pincode === "") {
-                    context.alertBox("error", "Please enter your Pincode.");
-                    return;
-                }
-                if (formFields.country === "") {
-                    context.alertBox("error", "Please enter your Country.");
-                    return;
-                }
-                if (phone === "") {
-                    context.alertBox("error", "Please enter your 10 digit mobile number.");
-                    return;
-                }
-                if (formFields.status === "") {
-                    context.alertBox("error", "Status is required.");
-                    return;
-                }
+           const handleSave = async (e) => {
+               e.preventDefault();
+               try {
+                   setIsLoading(true);
 
-                
-                // Prepare data for API
-                const addressData = {
-                    ...formFields,
-                    mobile: phone
-                };
-                
-                const response = await postData('/api/address/add', addressData);
-                
-                if (response && response.success) {
-                    context.alertBox("success", "Address added successfully!");
-                    // Reset form
-                    setFormFields({
-                        address_line1: '',
-                        city: '',
-                        state: '',
-                        pincode: '',
-                        country: '',
-                        mobile: '',
-                        status: ''
-                    });
-                    setPhone('');
-                    setStatus('false');
-                } else {
-                    context.alertBox("error", response?.message || "Failed to add address");
-                }
-                
-            } catch (error) {
-                console.error('Error saving address:', error);
-                context.alertBox("error", "Failed to save address");
-            } finally {
-                setIsLoading(false);
-            }
-        };
+                   const token = localStorage.getItem('accessToken');
+                   if(!token) {
+                       context.alertBox("error", "Please login first to add address.");
+                       return;
+                   }
+
+                   if(formFields.address_line1 === ""){
+                       context.alertBox("error", "Please enter Address Line 1.");
+                       return;
+                   }
+
+                   if (formFields.city === ""){
+                       context.alertBox("error", "Please enter Your city name.");
+                       return;
+                   }
+
+                   if (formFields.state === ""){
+                       context.alertBox("error", "Please enter Your state.");
+                       return;
+                   }
+
+                   if (formFields.pincode === ""){
+                       context.alertBox("error", "Please enter Your pincode.");
+                       return;
+                   }
+
+                   if (formFields.country === ""){
+                       context.alertBox("error", "Please enter Your country.");
+                       return;
+                   }
+
+                   if (phone === ""){
+                       context.alertBox("error", "Please enter Your 10-digit mobile number.");
+                       return;
+                   }
+
+                   const addressData = {
+                       ...formFields,
+                       mobile: phone
+                   };
+
+                   const response = await postData('/api/address/add', addressData);
+                   
+                   if (response && response.success) {
+                       context.alertBox("success", "Address added successfully!");
+                       setFormFields({
+                           address_line1: '',
+                           city: '',
+                           state: '',
+                           pincode: '',
+                           country: '',
+                           mobile: '',
+                           status: 'false'
+                       });
+                       setPhone('');
+                       setStatus('false');
+                   } else {
+                       context.alertBox("error", response?.message || "Failed to add address");
+                   }
+               } catch (error) {
+                   context.alertBox("error", "Failed to save address");
+               } finally {
+                   setIsLoading(false);
+               }
+           };
 
     return (
         <section className="p-5 bg-gray-50">
@@ -124,7 +128,8 @@ const AddAddress = () => {
                                 name="address_line1"
                                 value={formFields.address_line1}
                                 onChange={handleFormChange}
-                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)]focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" 
+                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)] focus:outline-none 
+                                focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white"
                             />
                         </div>
 
@@ -135,10 +140,9 @@ const AddAddress = () => {
                                 name="city"
                                 value={formFields.city}
                                 onChange={handleFormChange}
-                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)]focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" 
+                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)] focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" 
                             />
                         </div>
-
                     </div>
 
                     <div className="grid grid-cols-3 text-black mb-3 gap-4">
@@ -149,7 +153,7 @@ const AddAddress = () => {
                                 name="state"
                                 value={formFields.state}
                                 onChange={handleFormChange}
-                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)]focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" 
+                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)] focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" 
                             />
                         </div>
 
@@ -160,7 +164,7 @@ const AddAddress = () => {
                                 name="pincode"
                                 value={formFields.pincode}
                                 onChange={handleFormChange}
-                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)]focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" 
+                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)] focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" 
                             />
                         </div>
 
@@ -171,7 +175,7 @@ const AddAddress = () => {
                                 name="country"
                                 value={formFields.country}
                                 onChange={handleFormChange}
-                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)]focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" 
+                                className="w-full h-[40px] border border-[rgba(0,0,0,0.2)] focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" 
                             />
                         </div>
 
@@ -202,43 +206,28 @@ const AddAddress = () => {
                                         status: e.target.value
                                     }))
                                 }}
-                                displayEmpty
-                                inputProps={{ 'aria-label': 'Without label' }}
-                                size="small"
-                                className="w-full"
+                                className="w-full h-[40px] bg-white"
                             >
-                                <MenuItem value={'true'}>True</MenuItem>
-                                <MenuItem value={'false'}>False</MenuItem>
+                                <MenuItem value="false">False</MenuItem>
+                                <MenuItem value="true">True</MenuItem>
                             </Select>
                         </div>
-
-
-
-
                     </div>
 
-
-                    <br />
-
-
+                    <div className="flex justify-end mt-6">
+                        <Button 
+                            type="submit" 
+                            variant="contained" 
+                            disabled={isLoading}
+                            className="!bg-blue-600 !text-white !px-8 !py-2"
+                        >
+                            {isLoading ? 'Saving...' : 'Publish and View'}
+                        </Button>
+                    </div>
                 </div>
-
-                <br />
-
-                <br />
-                <div className='w-[250px]'>
-                    <Button 
-                        type="submit" 
-                        disabled={isLoading}
-                        className="btn-blue btn-lg w-full flex gap-4"
-                    >
-                        <span><FaCloudUploadAlt className="text-[25px] text-white" /></span>
-                        {isLoading ? 'Saving...' : 'Add Address'} and View</Button>
-                </div>
-
             </form>
         </section>
-    )
-}
+    );
+};
 
 export default AddAddress;

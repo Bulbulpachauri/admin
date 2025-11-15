@@ -13,7 +13,7 @@ import productRouter from './route/product.route.js';
 import cartRouter from './route/cart.route.js';
 import myListRouter from './route/mylist.route.js';
 import addressRouter from './route/address.route.js';
-import { addAddressController } from './controllers/address.controller.js';
+
 
 const app = express();
 app.use(cors({
@@ -55,7 +55,7 @@ app.use('/api/category', categoryRouter);
 app.use('/api/product', productRouter);
 app.use('/api/cart', cartRouter);
 app.use('/api/myList', myListRouter);
-app.use('/api/address',addAddressController);
+app.use('/api/address', addressRouter);
 
 connectDB().then(() => {
     app.listen(PORT, () => {

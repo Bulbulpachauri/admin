@@ -37,10 +37,10 @@ const Header = () => {
   return (
     <header className={`w-full h-[auto] py-2 ${context.isSidebarOpen ? 'pl-64' : 'pl-5'} pr-7 bg-[#fff] border-b border-[rgba(0,0,0,0.1)] flex items-center justify-between transition-all shadow-md`}>
       <div className="part1">
-        <Button className="!w-[35px] !h-[35px] !rounded-full !min-w-[35px] text-[rgba(0,0,0,0.8)]"
+        <div className="w-[35px] h-[35px] rounded-full min-w-[35px] text-[rgba(0,0,0,0.8)] flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
           onClick={() => context.setSidebarOpen(!context.isSidebarOpen)}>
           <AiOutlineMenuUnfold className="text-[18px] text-[rgba(0,0,0,0.8)]" />
-        </Button>
+        </div>
       </div>
 
       <div className="part2 flex items-center justify-end gap-5">
@@ -120,7 +120,7 @@ const Header = () => {
             </Menu>
           </div>
         ) : (
-          <Button className="btn-blue">Sing In</Button>
+          <Link to="/login" className="btn-blue px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">Sign In</Link>
         )}
       </div>
     </header>

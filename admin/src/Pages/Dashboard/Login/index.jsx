@@ -77,18 +77,20 @@ const Login = () => {
         </Link>
 
         <div className='flex items-center gap-2'>
-          <NavLink to="/login" exact={true} activeClassName="isActive">
-              {({ isActive }) => (
+          <NavLink to="/login">
+            {({ isActive }) => (
               <Button className={`!rounded-full !px-5 flex gap-2 ${isActive ? '!text-blue-600 !font-semibold' : '!text-gray-700'}`}>
                 <CgLogIn className="text-lg" /> Login
               </Button>
             )}
           </NavLink>
 
-          <NavLink to="/sign-up" exact={true} activeClassName="isActive">
-             <Button className='!rounded-full !text-gray-700 !px-5 flex gap-2'>
+          <NavLink to="/sign-up">
+            {({ isActive }) => (
+             <Button className={`!rounded-full !px-5 flex gap-2 ${isActive ? '!text-blue-600 !font-semibold' : '!text-gray-700'}`}>
                 <FaRegUser className="text-base" /> Sign Up
               </Button>
+            )}
           </NavLink>
         </div>
       </header>

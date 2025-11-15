@@ -117,6 +117,7 @@ export async function verifyEmailController(request, response) {
 export async function loginUserController(request, response) {
     try {
         const { email, password } = request.body;
+        console.log('Login attempt for email:', email);
 
         if (!email || !password) {
             return response.status(400).json({
@@ -127,6 +128,7 @@ export async function loginUserController(request, response) {
         }
 
         const user = await UserModel.findOne({ email: email });
+        console.log('User found:', user ? 'Yes' : 'No');
         if (!user) {
             return response.status(400).json({
                 message: "User not registered",
@@ -143,6 +145,7 @@ export async function loginUserController(request, response) {
             });
         }
 
+        console.log('User verification status:', user.verify_email);
         if (user.verify_email !== true) {
             return response.status(400).json({
                 message: "Your Email is not verify yet please verify your email first",
@@ -162,6 +165,9 @@ export async function loginUserController(request, response) {
 
         const accesstoken = await generateAccessToken(user._id);
         const refreshtoken = await generateRefreshToken(user._id);
+        console.log('Generated tokens - Access:', accesstoken ? 'exists' : 'missing');
+        console.log('Generated tokens - Refresh:', refreshtoken ? 'exists' : 'missing');
+        console.log('JWT Secret for token generation:', process.env.SECRET_KEY_ACCESS_TOKEN);
 
         const cookiesOption = {
             httpOnly: true,
@@ -177,6 +183,7 @@ export async function loginUserController(request, response) {
             access_token: accesstoken
         });
 
+        console.log('Login successful for user:', user._id);
         return response.json({
             message: "Login successful",
             error: false,
