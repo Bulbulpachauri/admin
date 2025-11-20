@@ -24,16 +24,25 @@ export const addAddressController = async (request, response) => {
         }
 
         const addresses = new AddressModel({
-            address: address_line1, city, state, pincode, country, mobile, status, userId
+            address: address_line1,
+            city,
+            state,
+            pincode,
+            country,
+            mobile,
+            status,
+            userId
         })
 
         const savedAddress = await addresses.save();
+        console.log('Address saved:', savedAddress);
 
         const updateCartUser = await UserModel.updateOne({_id: userId },{
             $push: {
                 address_details: savedAddress._id
             }
         })
+        console.log('User updated:', updateCartUser);
 
         return response.status(200).json({
             message: "Address added successfully",
@@ -54,8 +63,16 @@ export const addAddressController = async (request, response) => {
 export const getAddressController = async (request, response) => {
     try {
         const userId = request.userId;
+        console.log('Getting addresses for userId:', userId);
+        console.log('UserId type:', typeof userId);
         
-        const addresses = await AddressModel.find({ userId }).populate('userId', 'name email');
+        // Get all addresses to debug
+        const allAddresses = await AddressModel.find({});
+        console.log('All addresses in DB:', allAddresses);
+        
+        const addresses = await AddressModel.find({ userId });
+        console.log('Found addresses for user:', addresses);
+        console.log('Number of addresses found:', addresses.length);
         
         return response.status(200).json({
             message: "Addresses fetched successfully",
@@ -63,6 +80,50 @@ export const getAddressController = async (request, response) => {
             success: true
         })
         
+    } catch (error) {
+        console.error('Error in getAddressController:', error);
+        return response.status(500).json({
+            message: error.message || error,
+            error: true,
+            success: false
+        })
+    }
+}
+
+export const updateAddressController = async (request, response) => {
+    try {
+        const { addressId } = request.body;
+        const userId = request.userId;
+
+        if (!addressId) {
+            return response.status(400).json({
+                message: "Address ID is required",
+                error: true,
+                success: false
+            })
+        }
+
+        // Verify the address belongs to the user
+        const address = await AddressModel.findOne({ _id: addressId, userId });
+        if (!address) {
+            return response.status(404).json({
+                message: "Address not found",
+                error: true,
+                success: false
+            })
+        }
+
+        // Set all user addresses to inactive
+        await AddressModel.updateMany({ userId }, { status: false });
+        
+        // Set selected address to active
+        await AddressModel.updateOne({ _id: addressId }, { status: true });
+
+        return response.status(200).json({
+            message: "Address updated successfully",
+            success: true
+        })
+
     } catch (error) {
         return response.status(500).json({
             message: error.message || error,

@@ -4,7 +4,9 @@ import TextField from '@mui/material/TextField';
 import AccountSidebar from '../../components/AccountSidebar';
 import { MyContext } from '../../App';
 import { useNavigate } from 'react-router-dom';
-import { fetchData, editData } from '../../utils/api';
+import { fetchData, editData, postData } from '../../utils/api';
+import { PhoneInput } from 'react-international-phone';
+import 'react-international-phone/style.css';
 
 const MyAccount = () => {
     const [userDetails, setUserDetails] = useState({
@@ -12,6 +14,7 @@ const MyAccount = () => {
         email: '',
         phone: ''
     });
+    const [phone, setPhone] = useState('');
     const [changePassword, setChangePassword] = useState({
         oldPassword: '',
         newPassword: '',
@@ -32,6 +35,7 @@ const MyAccount = () => {
         status: true
     });
     const [addressLoading, setAddressLoading] = useState(false);
+    const [selectedAddress, setSelectedAddress] = useState(null);
 
     const context = useContext(MyContext);
     const history = useNavigate();
@@ -59,12 +63,29 @@ const MyAccount = () => {
 
     const fetchAddresses = async () => {
         try {
+            console.log('Fetching addresses...');
+            console.log('Token:', localStorage.getItem('token'));
             const response = await fetchData('/api/address/get');
-            if (response.data && response.data.success) {
+            console.log('Full response object:', response);
+            console.log('Response status:', response?.status);
+            console.log('Response data:', response?.data);
+            
+            if (response?.data && response.data.success) {
+                console.log('address data:', response.data.data);
+                console.log('Number of addresses:', response.data.data.length);
                 setAddresses(response.data.data);
+                // Set the active address as selected
+                const activeAddress = response.data.data.find(addr => addr.status === true);
+                if (activeAddress) {
+                    setSelectedAddress(activeAddress._id);
+                }
+            } else {
+                console.log('No addresses found or request failed');
+                console.log('Response success:', response?.data?.success);
             }
         } catch (error) {
             console.error('Error fetching addresses:', error);
+            console.error('Error details:', error.response?.data);
         }
     };
 
@@ -78,8 +99,8 @@ const MyAccount = () => {
     const handleAddAddress = async () => {
         setAddressLoading(true);
         try {
-            const response = await editData('/api/address/add', addressForm);
-            if (response.data && response.data.success) {
+            const response = await postData('/api/address/add', addressForm);
+            if (response && response.success) {
                 context.alertBox("success", "Address added successfully!");
                 setAddressForm({
                     address_line1: '',
@@ -94,7 +115,7 @@ const MyAccount = () => {
                 fetchAddresses();
             }
         } catch (error) {
-            context.alertBox("error", "Failed to add address");
+            context.alertBox("error", error?.message || "Failed to add address");
         }
         setAddressLoading(false);
     };
@@ -132,6 +153,19 @@ const MyAccount = () => {
             context.alertBox("error", "Failed to change password");
         }
         setIsLoading2(false);
+    };
+
+    const handleAddressSelection = async (addressId) => {
+        try {
+            const response = await editData('/api/address/update', { addressId });
+            if (response.data && response.data.success) {
+                setSelectedAddress(addressId);
+                context.alertBox("success", "Address selected successfully!");
+                fetchAddresses(); // Refresh addresses to update status
+            }
+        } catch (error) {
+            context.alertBox("error", "Failed to select address");
+        }
     };
 
     const handleSave = async () => {
@@ -191,14 +225,16 @@ const MyAccount = () => {
 
                             <div className="flex items-center mt-4 gap-5">
                                 <div className="w-[50%]">
-                                    <TextField
-                                        label="Phone Number"
-                                        variant="outlined"
-                                        size="small"
-                                        className="w-full"
-                                        name="phone"
-                                        value={userDetails.phone}
-                                        onChange={handleInputChange}
+                                   <PhoneInput
+                                        defaultCountry="in"
+                                        value={userDetails.phone || ''}
+                                        disabled={loading}
+                                        onChange={(phoneValue) => {
+                                        setUserDetails(prev => ({
+                                            ...prev,
+                                            phone: phoneValue
+                                        }));
+                                    }}
                                     />
                                 </div>
                             </div>
@@ -288,7 +324,8 @@ const MyAccount = () => {
 
                     <div className="card bg-white p-5 shadow-md rounded-md mt-5">
                         <div className="flex items-center pb-3">
-                            <h2 className="pb-0">My Addresses</h2>
+                            <h2 className="pb-0">My Address</h2>
+                            <Button className="!ml-2" onClick={fetchAddresses}>Refresh</Button>
                             <Button className="!ml-auto" onClick={() => setShowAddAddress(!showAddAddress)}>Add Address</Button>
                         </div>
                         <hr />
@@ -391,38 +428,55 @@ const MyAccount = () => {
                             </form>
                         )}
 
-                        {addresses.length > 0 && (
-                            <div className="mt-6">
-                                <h3 className="text-lg font-semibold mb-4">Saved Addresses</h3>
-                                <div className="space-y-4">
-                                    {addresses.map((address, index) => (
-                                        <div key={address._id} className="border border-gray-200 rounded-lg p-4 bg-gray-50">
-                                            <div className="flex justify-between items-start">
-                                                <div>
-                                                    <p className="font-medium text-gray-800">{address.address}</p>
-                                                    <p className="text-gray-600">{address.city}, {address.state} - {address.pincode}</p>
-                                                    <p className="text-gray-600">{address.country}</p>
-                                                    <p className="text-gray-600">Mobile: {address.mobile}</p>
-                                                </div>
-                                                <div className="flex items-center">
-                                                    <span className={`px-2 py-1 rounded-full text-xs ${
-                                                        address.status ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'
-                                                    }`}>
-                                                        {address.status ? 'Active' : 'Inactive'}
-                                                    </span>
+                        <div className="mt-6">
+                            <h3 className="text-lg font-semibold mb-4">Saved address</h3>
+                            {addresses.length > 0 ? (
+                                <>
+                                    {addresses.find(addr => addr.status) && (
+                                        <div className="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                                            <p className="text-sm font-medium text-green-800 mb-1">Currently Selected Address:</p>
+                                            <p className="text-green-700">
+                                                {addresses.find(addr => addr.status)?.address}, {addresses.find(addr => addr.status)?.city}, {addresses.find(addr => addr.status)?.state} - {addresses.find(addr => addr.status)?.pincode}
+                                            </p>
+                                        </div>
+                                    )}
+                                    <div className="space-y-4">
+                                        {addresses.map((address, index) => (
+                                            <div key={address._id} className={`border rounded-lg p-4 cursor-pointer transition-colors ${
+                                                address.status ? 'border-blue-300 bg-blue-50' : 'border-gray-200 bg-gray-50 hover:bg-gray-100'
+                                            }`}>
+                                                <div className="flex items-start gap-3">
+                                                    <input
+                                                        type="radio"
+                                                        name="selectedAddress"
+                                                        checked={address.status}
+                                                        onChange={() => handleAddressSelection(address._id)}
+                                                        className="mt-1 w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                                                    />
+                                                    <div className="flex-1">
+                                                        <p className="font-medium text-gray-800">{address.address}</p>
+                                                        <p className="text-gray-600">{address.city}, {address.state} - {address.pincode}</p>
+                                                        <p className="text-gray-600">{address.country}</p>
+                                                        <p className="text-gray-600">Mobile: {address.mobile}</p>
+                                                    </div>
+                                                    <div className="flex items-center">
+                                                        <span className={`px-2 py-1 rounded-full text-xs ${
+                                                            address.status ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-600'
+                                                        }`}>
+                                                            {address.status ? 'Selected' : 'Available'}
+                                                        </span>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    ))}
+                                        ))}
+                                    </div>
+                                </>
+                            ) : (
+                                <div className="text-center py-8 text-gray-500">
+                                    <p>No addresses found. Click "Add Address" to add your first address.</p>
                                 </div>
-                            </div>
-                        )}
-
-                        {addresses.length === 0 && !showAddAddress && (
-                            <div className="text-center py-8 text-gray-500">
-                                <p>No addresses found. Click "Add Address" to add your first address.</p>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </div>
                 </div>
             </div>

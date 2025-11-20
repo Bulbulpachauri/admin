@@ -28,6 +28,7 @@ import Dashboard from "./Pages/Dashboard/index.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 import toast, { Toaster } from 'react-hot-toast';
+import Address from "./Pages/MyAccount/address.jsx";
 
 const MyContext = createContext();
 
@@ -104,9 +105,11 @@ function App() {
             <Route path="/cart" element={<ProtectedRoute><CartPage /></ProtectedRoute>} />
             <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             <Route path="/my-account" element={<ProtectedRoute><MyAccount /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><MyAccount /></ProtectedRoute>} />
             <Route path="/my-list" element={<ProtectedRoute><MyList /></ProtectedRoute>} />
             <Route path="/my-orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
             <Route path="/logout" element={<ProtectedRoute><Logout /></ProtectedRoute>} />
+            <Route path="/address" element={<ProtectedRoute><Address /></ProtectedRoute>} />
           </Routes>
           <Footer />
         </MyContext.Provider>

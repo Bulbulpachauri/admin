@@ -91,3 +91,18 @@ export const editData = async (URL, updatedData) => {
          throw error;
      }
 }
+
+export const deleteData = async (URL) => {
+    try {
+        const response = await axios.delete(apiUrl + URL, {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            },
+            withCredentials: true
+        });
+        return response;
+    } catch (error) {
+        console.error('API Error:', error);
+        throw error;
+    }
+}

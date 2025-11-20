@@ -8,6 +8,8 @@ import { IoIosLogOut } from "react-icons/io";
 import { NavLink } from 'react-router-dom';
 import { MyContext } from '../../App';
 import { editData, fetchData } from '../../utils/api';
+import { LuMapPinCheck } from "react-icons/lu";
+import { MdOutlineManageAccounts } from "react-icons/md";   
 
 const AccountSidebar = () => {
 
@@ -145,7 +147,15 @@ const AccountSidebar = () => {
                 <li className="w-full">
                     <NavLink to="/my-account" className={({ isActive }) => isActive ? "isActive" : ""}>
                         <Button className="w-full !text-left !py-2 !px-5 !justify-start !capitalize !text-[rgba(0,0,0,0.7)]
-                             !rounded-none flex items-center gap-2"><FaRegUser className="text-[17px]" />My Profile
+                             !rounded-none flex items-center gap-2"><FaRegUser className="text-[15px]" />My Profile
+                        </Button>
+                    </NavLink>
+                </li>
+
+                 <li className="w-full">
+                    <NavLink to="/address" className={({ isActive }) => isActive ? "isActive" : ""}>
+                        <Button className="w-full !text-left !py-2 !px-5 !justify-start !capitalize !text-[rgba(0,0,0,0.7)]
+                             !rounded-none flex items-center gap-2"><LuMapPinCheck className="text-[18px]" />Address
                         </Button>
                     </NavLink>
                 </li>
@@ -165,7 +175,7 @@ const AccountSidebar = () => {
                 <li className="w-full">
                     <NavLink to="/my-orders" className={({ isActive }) => isActive ? "isActive" : ""}>
                         <Button className="w-full !text-left !py-2 !px-5 !justify-start !capitalize !text-[rgba(0,0,0,0.7)]
-                             !rounded-none flex items-center gap-2">< IoIosHeartEmpty className="text-[17px]" />My Orders
+                             !rounded-none flex items-center gap-2"><IoIosHeartEmpty className="text-[17px]" />My Orders
                         </Button>
                     </NavLink>
                 </li>
