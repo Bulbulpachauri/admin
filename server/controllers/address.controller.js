@@ -132,3 +132,37 @@ export const updateAddressController = async (request, response) => {
         })
     }
 }
+
+export const deleteAddressController = async (request, response) => {
+    try {
+        const { id } = request.params;
+        
+        const deletedAddress = await AddressModel.findByIdAndDelete(id);
+        
+        if (!deletedAddress) {
+            return response.status(404).json({
+                message: "Address not found",
+                error: true,
+                success: false
+            })
+        }
+
+        // Remove from user's address_details array
+        await UserModel.updateOne(
+            { _id: deletedAddress.userId },
+            { $pull: { address_details: id } }
+        );
+
+        return response.status(200).json({
+            message: "Address deleted successfully",
+            success: true
+        })
+
+    } catch (error) {
+        return response.status(500).json({
+            message: error.message || error,
+            error: true,
+            success: false
+        })
+    }
+}

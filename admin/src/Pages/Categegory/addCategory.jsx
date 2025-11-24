@@ -4,9 +4,26 @@ import UploadBox from '../../Components/UploadBox';
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from '@mui/material/Button';
 import { IoMdClose } from "react-icons/io";
+import { useState } from 'react';
 
 
 const AddCategory = () => {
+
+  const [formFields, setFormFields] = useState({
+    name: "",
+    images: [],
+  })
+
+  const onChangeInput = (e) => {
+    const {name,value}=e.target;
+    setFormFields(() => {
+      return {
+      ...formFields,
+      [name]: value
+      }
+      })
+  }
+
   return (
     <section className="p-5 bg-gray-50">
       <form className="form py-3 p-8">
@@ -15,7 +32,7 @@ const AddCategory = () => {
           <div className="col w-[25%]">
             <h3 className="text-[14px] font-[500] mb-1">Categegory Name</h3>
             <input type="text" className="w-full h-[40px] border border-[rgba(0,0,0,0.2)]focus:outline-none
-             focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm bg-white" />
+             focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm" onChange={onChangeInput} />
           </div>
         </div>
 
@@ -40,7 +57,7 @@ const AddCategory = () => {
                 />
               </div>
             </div>
-            <UploadBox multiple={true} />
+            <UploadBox multiple={true} name="images" url="/api/category/upload" />
           </div>
         </div>
 
