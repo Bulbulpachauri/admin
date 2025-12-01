@@ -15,9 +15,9 @@ const categorySchema = new mongoose.Schema({
         type:String,
     },
     parentId: {
-        type:mongoose.Schema.Types.ObjectId,ref:"Category",
+        type: mongoose.Schema.Types.ObjectId,
         ref: "Category",
-        default: ""
+        default: null
     },
 },{timestamps:true})
 

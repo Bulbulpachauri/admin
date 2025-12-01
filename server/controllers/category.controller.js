@@ -5,44 +5,48 @@ import fs from 'fs';
 
 
 cloudinary.config({
-    cloud_name: process.env.cloudinary_Config_Cloud_Name,
-    api_key: process.env.cloudinary_Config_api_key,
-    api_secret: process.env.cloudinary_Config_api_secret,
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET,
     secure: true,
 });
 
 
 //image upload
-var imagesArr = [];
 export async function uploadImages(request, response) {
     try {
-        imagesArr = [];
-
-        const image = request.files;
-
-        const options = {
-            use_filename: true,
-            unique_filename: false,
-            overwrite: false,
-        };
-
-        for (let i = 0; i < image?.length; i++) {
-            const result = await cloudinary.uploader.upload(
-                image[i].path,
-                options,
-                function (error, result) {
-                    imagesArr.push(result.secure_url);
-                    fs.unlinkSync(`uploads/${request.files[i].filename}`)
-                }
-            );
+        console.log('Upload request received');
+        console.log('Files:', request.files);
+        
+        const images = request.files;
+        if (!images || images.length === 0) {
+            console.log('No images provided');
+            return response.status(400).json({
+                message: "No images provided",
+                error: true,
+                success: false
+            });
         }
 
+        // For now, just return placeholder URLs to test the flow
+        const imageUrls = [];
+        
+        for (let i = 0; i < images.length; i++) {
+            // Create a simple URL for testing
+            const imageUrl = `http://localhost:8000/uploads/${images[i].filename}`;
+            imageUrls.push(imageUrl);
+        }
+
+        console.log('Returning image URLs:', imageUrls);
+        
         return response.status(200).json({
-            images: imagesArr
+            images: imageUrls,
+            success: true,
+            error: false
         });
 
-
     } catch (error) {
+        console.log('Upload error:', error);
         return response.status(500).json({
             message: error.message || error,
             error: true,
@@ -56,26 +60,37 @@ export async function uploadImages(request, response) {
 //create category
 export async function createCategory(request, response) {
     try {
-        let category = new CategoryModel({
-            name: request.body.name,
-            images: imagesArr,
-            parentId: request.body.parentId,
-            parentCatName: request.body.parentCatName,
-        });
-
-        if (!category.name) {
+        console.log('Create category request body:', request.body);
+        
+        if (!request.body.name || request.body.name.trim() === '') {
             return response.status(400).json({
-                message: "Category not created",
+                message: "Category name is required",
                 error: true,
                 success: false
             })
         }
 
+        // Ensure images is an array
+        let images = request.body.images;
+        if (typeof images === 'string') {
+            images = [images];
+        } else if (!Array.isArray(images)) {
+            images = [];
+        }
+
+        let category = new CategoryModel({
+            name: request.body.name.trim(),
+            images: images,
+            parentId: request.body.parentId || null,
+            parentCatName: request.body.parentCatName || '',
+        });
+
+        console.log('Category object before save:', category);
+        
         category = await category.save();
+        console.log('Category saved successfully:', category);
 
-        imagesArr = [];
-
-        return response.status(400).json({
+        return response.status(201).json({
             message: "Category created",
             error: false,
             success: true,
@@ -83,6 +98,7 @@ export async function createCategory(request, response) {
         })
 
     } catch (error) {
+        console.log('Create category error:', error);
         return response.status(500).json({
             message: error.message || error,
             error: true,
@@ -95,24 +111,35 @@ export async function createCategory(request, response) {
 //get categories
 export async function getCategories(request, response) {
     try {
+        console.log('Getting categories...');
         const categories = await CategoryModel.find();
+        console.log('Found categories:', categories.length);
+        
+        if (!categories || categories.length === 0) {
+            return response.status(200).json({
+                error: false,
+                success: true,
+                data: []
+            });
+        }
+
         const categoryMap = {};
 
         categories.forEach((category) => {
-            categoryMap[cat._id] = { ...cat._doc, children: [] };
+            categoryMap[category._id] = { ...category._doc, children: [] };
         });
 
         const rootCategories = [];
 
-        categories.forEach(cat => {
-            if (cat.parentId) {
-                categoryMap[cat.parentId].children.push(categoryMap[cat._id]);
+        categories.forEach(category => {
+            if (category.parentId && categoryMap[category.parentId]) {
+                categoryMap[category.parentId].children.push(categoryMap[category._id]);
             } else {
-                rootCategories.push(categoryMap[cat._id]);
+                rootCategories.push(categoryMap[category._id]);
             }
         });
 
-
+        console.log('Returning root categories:', rootCategories.length);
         return response.status(200).json({
             error: false,
             success: true,
@@ -120,6 +147,7 @@ export async function getCategories(request, response) {
         });
 
     } catch (error) {
+        console.log('Get categories error:', error);
         return response.status(500).json({
             message: error.message || error,
             error: true,

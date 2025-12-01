@@ -160,3 +160,49 @@ export const fetchDataFromApi = async (URL) => {
         throw error;
     }
 }
+
+export const uploadImage = async (URL, formData) => {
+    try {
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
+        
+        const response = await axios.post(apiUrl + URL, formData, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+        }
+        console.error("Upload Error:", error);
+        throw error;
+    }
+}
+
+export const deleteImage = async (URL) => {
+    try {
+        const token = getAuthToken();
+        if (!token) {
+            throw new Error('No authentication token found');
+        }
+        
+        const response = await axios.delete(apiUrl + URL, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+        return response;
+    } catch (error) {
+        if (error.response?.status === 401) {
+            localStorage.removeItem('accessToken');
+            localStorage.removeItem('refreshToken');
+        }
+        console.error("Delete Image Error:", error);
+        throw error;
+    }
+}
