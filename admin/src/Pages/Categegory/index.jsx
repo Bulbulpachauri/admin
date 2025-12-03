@@ -155,14 +155,19 @@ const CategoryList = () => {
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-4">
-                            <div className="img w-[65px] h-[65px] rounded-full overflow-hidden group bg-gray-200 flex items-center justify-center">
-                              {category.images && category.images.length > 0 ? (
+                            <div className="img w-[65px] h-[65px] rounded-full overflow-hidden group bg-gray-200 flex items-center justify-center transition-transform duration-200 hover:scale-110">
+                              {category.images && category.images.length > 0 && category.images[0] ? (
+                                <img 
+                                  src={category.images[0]}
+                                  alt={category.name}
+                                  className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-110"
+                                  onError={(e) => {
+                                    e.target.parentElement.innerHTML = `<div class="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">${category.name.charAt(0).toUpperCase()}</div>`;
+                                  }}
+                                />
+                              ) : (
                                 <div className="w-full h-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-xs font-bold">
                                   {category.name.charAt(0).toUpperCase()}
-                                </div>
-                              ) : (
-                                <div className="w-full h-full flex items-center justify-center text-gray-500 text-xs">
-                                  No Image
                                 </div>
                               )}
                             </div>
@@ -177,13 +182,17 @@ const CategoryList = () => {
                           </div>
                         </TableCell>
 
-                        <TableCell>
-                          <div className="flex items-center gap-3">
+                        <TableCell width={100}>
+                          <div className="flex items-center gap-1">
                             <Tooltip title="Edit" placement="top">
-                              <Button className="!p-0 !w-10 !h-10 min-w-auto rounded-full bg-primary text-white"><AiOutlineEdit /></Button>
-                            </Tooltip>
-                            <Tooltip title="View" placement="top">
-                              <Button className="!p-0 !w-10 !h-10 min-w-auto rounded-full bg-blue-500 text-white"><FaRegEye /></Button>
+                              <Button className="!w-[35px] !h-[35px] bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.4)] !rounded-full hover:!bg-[#f1f1f1] !min-w-[35px]" 
+                              onClick={() => context.setIsOpenFullScreenPanel({
+                                open:true,
+                                model:'Edit Category',
+                                id:category._id
+                                })}
+                                >
+                                  <AiOutlineEdit className=" text-[rgba(0,0,0,0.7)] text-[20px] " /></Button>
                             </Tooltip>
                             <Tooltip title="Delete" placement="top">
                               <Button className="!p-0 !w-10 !h-10 min-w-auto rounded-full bg-red-500 text-white"><AiOutlineDelete /></Button>

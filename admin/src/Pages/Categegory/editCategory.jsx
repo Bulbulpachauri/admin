@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import UploadBox from '../../Components/UploadBox';
 import 'react-lazy-load-image-component/src/effects/blur.css'
@@ -7,11 +7,11 @@ import Button from '@mui/material/Button';
 import { IoMdClose } from "react-icons/io";
 import { useState } from 'react';
 import MyContext from '../../context/context';
-import { postData, deleteImage, uploadImage } from '../../utils/api';
+import { postData, deleteImage, uploadImage, editData } from '../../utils/api';
 import CircularProgress from '@mui/material/CircularProgress';
 
 
-const AddCategory = () => {
+const EditCategory = () => {
 
   const [formFields, setFormFields] = useState({
     name: "",
@@ -23,6 +23,14 @@ const AddCategory = () => {
 
   const context = useContext(MyContext);
 
+  useEffect(() =>{
+    const id = context?.setIsOpenFullScreenPanel?.id;
+
+    fetchDataFromApi(`/api/category/${id}`).then((res)=>{
+        console.log(res);
+    })
+
+  },[]);
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
@@ -77,16 +85,25 @@ const AddCategory = () => {
 
     // Basic validation
     if (!formFields.name.trim()) {
-      alert("Please enter category name");
+      alert("error", "Please enter category name");
       setIsLoading(false);
       return;
     }
 
     if (previews.length === 0) {
-      alert("Please select category image");
+      alert("error","Please select category image");
       setIsLoading(false);
       return;
     }
+
+    editData(`/api/category/${context?.setIsOpenFullScreenPanel?.id}`, formFields).then((res) => {
+        setTimeout(()=> {
+            setIsLoading(false);
+            context.setIsOpenFullScreenPanel({
+                open: false,
+            })
+        }, 2500)
+    })
 
     try {
       // Simple category creation with preview URLs
@@ -179,4 +196,4 @@ const AddCategory = () => {
   )
 }
 
-export default AddCategory;
+export default EditCategory;

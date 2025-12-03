@@ -33,6 +33,7 @@ import ChangePassword from './Pages/ChangePassword';
 import ResetPassword from './Pages/ResetPassword';
 import Profile from './Pages/Profile';
 import AddAddress from './Pages/Address/addAddress.jsx';
+import EditCategory from './Pages/Categegory/editCategory.jsx';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -56,7 +57,7 @@ function App() {
 
   const [isOpenFullScreenPanel,setIsOpenFullScreenPanel] = useState({
     open:false,
-    model:'',
+    id:""
   });
 
   const router = createBrowserRouter([
@@ -269,6 +270,24 @@ function App() {
       element: <ResetPassword />
     },
     {
+      path: '/categories/:id/edit',
+      element:(
+        <ProtectedRoute>
+          <section className='main'>
+            <Header/>
+            <div className="contentMain flex">
+              <div className={`overflow-hidden sidebarWrapper ${isSidebarOpen===true ? 'w-[18%]' : 'w-[0px] opacity-0'} transition-all`}>
+                <Sidebar/>
+              </div>
+              <div className={`contentRight py-4 px-5 ${isSidebarOpen===false ? 'w-[80%]' : 'w-[82%]'}`}>
+                <EditCategory />
+              </div>
+            </div>
+          </section>
+        </ProtectedRoute>
+      ),
+    },
+    {
       path: '/categories/subCat',
       element:(
         <ProtectedRoute>
@@ -376,6 +395,9 @@ function App() {
     alertBox('success', 'Logged out successfully');
   };
 
+  const [userData, setUserData] = useState(null);
+  const [address, setAddress] = useState(null);
+
   const values = {
     isSidebarOpen,
     setSidebarOpen,
@@ -384,6 +406,10 @@ function App() {
     isOpenFullScreenPanel,
     setIsOpenFullScreenPanel,
     alertBox,
+    setUserData,
+    userData,
+    setAddress,
+    address,
     logout,
   }
 
@@ -442,6 +468,16 @@ function App() {
              {
               isOpenFullScreenPanel?.model==='Add New Address' && 
               <AddAddress />     
+            }
+
+            {
+              isOpenFullScreenPanel?.model==='Edit Category' && 
+              <EditCategory />     
+            }
+
+            {
+              isOpenFullScreenPanel?.model==='Edit Category' && 
+              <EditCategory />     
             }
             
       </Dialog>
