@@ -26,8 +26,8 @@ const context = useContext(MyContext);
     setFormFields((prev) => ({
       ...prev,
       [name]: value
-    }))
-  }
+    }));
+  };
 
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -35,7 +35,7 @@ const context = useContext(MyContext);
       setIsLoading(true);
   
       // Basic validation
-      if (!formFields.name === "") {
+      if (formfields.name === "") {
         context.alertBox("error","Please enter category name");
         setIsLoading(false);
         return;
@@ -47,15 +47,14 @@ const context = useContext(MyContext);
         return;
       }
   
-       postData("/api/category/create", formfields).then((res) => {;
+       // postData("/api/category/create", formfields).then((res) => {
         setTimeout(()=>{
           setIsLoading(false);
           context.setIsOpenFullScreenPanel({
             open: false,
-          })
+          });
         }, 2500);
-        })
-      }
+      };
 
   return (
     <section className="p-5 bg-gray-50">
@@ -64,7 +63,7 @@ const context = useContext(MyContext);
            <div className="grid grid-cols-4 mb-3 gap-5">
           <div className="col">
             <h3 className="text-[14px] font-[500] mb-1">
-              ProductCategegory</h3>
+              Product Category</h3>
                                                 <Select
                           labelId="demo-simple-select-label"
                           id="productCatDrop"
@@ -80,8 +79,7 @@ const context = useContext(MyContext);
 
            <div className="col">
             <h3 className="text-[14px] font-[500] mb-1">Sub Category Name</h3>
-            <input type="text" className="w-full h-[40px] border border-[rgba(0,0,0,0.2)]focus:outline-none
-             focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm" name="name" value={formfields.name} onChange={onChangeInput} />
+            <input type="text" className="w-full h-[40px] border border-[rgba(0,0,0,0.2)] focus:outline-none focus:border-[rgba(0,0,0,0.4)] rounded-sm p-3 text-sm" name="name" value={formfields.name} onChange={onChangeInput} />
           </div>
 
         </div>
@@ -105,7 +103,7 @@ const context = useContext(MyContext);
 
       </form>
     </section>
-  )
-}
+  );
+};
 
 export default AddSubCategory;

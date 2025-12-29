@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button"
 import React, { useContext, useState, useEffect } from "react"
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -16,8 +16,8 @@ import { AiOutlineEdit, AiOutlineDelete } from "react-icons/ai";
 import { FaRegEye } from "react-icons/fa";
 import Tooltip from "@mui/material/Tooltip";
 import SearchBox from "../../Components/SearchBox";
-import { MyContext } from "../../context/MyContext";
-import { fetchData } from "../../utils/api";
+import MyContext from "../../context/context";
+import { fetchData, deleteData } from "../../utils/api";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -35,6 +35,7 @@ const CategoryList = () => {
   const [loading, setLoading] = useState(true);
 
   const context = useContext(MyContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchCategories();
@@ -49,6 +50,23 @@ const CategoryList = () => {
       console.error('Error fetching categories:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleDelete = async (categoryId) => {
+    if (window.confirm('Are you sure you want to delete this category?')) {
+      try {
+        const response = await deleteData(`/api/category/${categoryId}`);
+        if (response && response.data && response.data.success) {
+          alert('Category deleted successfully');
+          fetchCategories(); // Refresh the list
+        } else {
+          alert('Failed to delete category');
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('Failed to delete category');
+      }
     }
   };
 
@@ -76,10 +94,7 @@ const CategoryList = () => {
 
         <div className="col w-[30%] flex items-center justify-end gap-3">
           <Button className="btn !bg-green-600 !text-white btn-sm">Export</Button>
-          <Button className="btn-blue !text-white btn-sm" onClick={()=>context.setIsOpenFullScreenPanel({
-            open:true,
-            model:"Add New Category",
-          })}> Add New Category</Button>
+          <Button className="btn-blue !text-white btn-sm" onClick={() => navigate('/categories/add')}> Add New Category</Button>
         </div>
 
       </div>
@@ -186,16 +201,17 @@ const CategoryList = () => {
                           <div className="flex items-center gap-1">
                             <Tooltip title="Edit" placement="top">
                               <Button className="!w-[35px] !h-[35px] bg-[#f1f1f1] !border !border-[rgba(0,0,0,0.4)] !rounded-full hover:!bg-[#f1f1f1] !min-w-[35px]" 
-                              onClick={() => context.setIsOpenFullScreenPanel({
-                                open:true,
-                                model:'Edit Category',
-                                id:category._id
-                                })}
+                              onClick={() => navigate(`/categories/${category._id}/edit`)}
                                 >
                                   <AiOutlineEdit className=" text-[rgba(0,0,0,0.7)] text-[20px] " /></Button>
                             </Tooltip>
                             <Tooltip title="Delete" placement="top">
-                              <Button className="!p-0 !w-10 !h-10 min-w-auto rounded-full bg-red-500 text-white"><AiOutlineDelete /></Button>
+                              <Button 
+                                className="!p-0 !w-10 !h-10 min-w-auto rounded-full bg-red-500 text-white"
+                                onClick={() => handleDelete(category._id)}
+                              >
+                                <AiOutlineDelete />
+                              </Button>
                             </Tooltip>
                           </div>
                         </TableCell>

@@ -6,12 +6,15 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import Button from '@mui/material/Button';
 import { IoMdClose } from "react-icons/io";
 import { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import MyContext from '../../context/context';
-import { postData, deleteImage, uploadImage, editData } from '../../utils/api';
+import { postData, deleteImage, uploadImage, editData, fetchDataFromApi } from '../../utils/api';
 import CircularProgress from '@mui/material/CircularProgress';
 
 
 const EditCategory = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   const [formFields, setFormFields] = useState({
     name: "",
@@ -24,13 +27,20 @@ const EditCategory = () => {
   const context = useContext(MyContext);
 
   useEffect(() =>{
-    const id = context?.setIsOpenFullScreenPanel?.id;
-
-    fetchDataFromApi(`/api/category/${id}`).then((res)=>{
-        console.log(res);
-    })
-
-  },[]);
+    if(id) {
+      fetchDataFromApi(`/api/category/${id}`).then((res)=>{
+        if(res && res.success) {
+          setFormFields({
+            name: res.data.name || "",
+            images: res.data.images || []
+          });
+          setPreviews(res.data.images || []);
+        }
+      }).catch(err => {
+        console.error('Failed to fetch category:', err);
+      });
+    }
+  },[id]);
 
   const onChangeInput = (e) => {
     const { name, value } = e.target;
@@ -41,10 +51,7 @@ const EditCategory = () => {
   }
 
   const setPreviewsFun = (PreviewsArr) => {
-    console.log('setPreviewsFun called with:', PreviewsArr);
     const newPreviews = typeof PreviewsArr === 'function' ? PreviewsArr(previews) : PreviewsArr;
-    console.log('Current previews:', previews);
-    console.log('New previews:', newPreviews);
     setPreviews(newPreviews);
     setFormFields((prev) => ({
       ...prev,
@@ -80,57 +87,38 @@ const EditCategory = () => {
    
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted!');
     setIsLoading(true);
 
-    // Basic validation
     if (!formFields.name.trim()) {
-      alert("error", "Please enter category name");
+      context.alertBox('error', 'Please enter category name');
       setIsLoading(false);
       return;
     }
 
     if (previews.length === 0) {
-      alert("error","Please select category image");
+      context.alertBox('error', 'Please select category image');
       setIsLoading(false);
       return;
     }
 
-    editData(`/api/category/${context?.setIsOpenFullScreenPanel?.id}`, formFields).then((res) => {
-        setTimeout(()=> {
-            setIsLoading(false);
-            context.setIsOpenFullScreenPanel({
-                open: false,
-            })
-        }, 2500)
-    })
-
     try {
-      // Simple category creation with preview URLs
       const categoryData = {
         name: formFields.name,
         images: previews
       };
 
-      console.log('Sending data:', categoryData);
-      const res = await postData("/api/category/create", categoryData);
-      console.log('Response:', res);
+      const res = await editData(`/api/category/${id}`, categoryData);
       
-      if (res && res.success) {
-        setFormFields({ name: "", images: [] });
-        setPreviews([]);
-        // Close the panel and navigate to categories
-        if (context?.setIsOpenFullScreenPanel) {
-          context.setIsOpenFullScreenPanel({ open: false, model: "" });
-        }
-        window.location.href = '/categories';
+      if (res && res.data && res.data.success) {
+        context.alertBox('success', 'Category updated successfully');
+        setTimeout(() => navigate('/categories'), 1000);
       } else {
-        alert(res?.message || "Failed to create category");
+        context.alertBox('error', res?.data?.message || 'Failed to update category');
       }
       
     } catch (err) {
-      console.error('Submit error:', err);
-      alert("Failed to create category: " + (err.message || 'Unknown error'));
+      console.error('Update error:', err);
+      context.alertBox('error', 'Failed to update category: ' + (err.message || 'Unknown error'));
     } finally {
       setIsLoading(false);
     }
@@ -185,7 +173,7 @@ const EditCategory = () => {
               : 
               <>
                 <FaCloudUploadAlt className='text-[25px] text-white' />
-                Publish and View
+                Update Category
               </>
             }
             </Button>

@@ -274,7 +274,7 @@ export async function removeImageFromCloudinary(request, response) {
 
 
 export async function deletCategory(request, response) {
-    const category = await CategoryModel.findByIdAndRemove(request.params.id);
+    const category = await CategoryModel.findByIdAndDelete(request.params.id);
     const images = category.images;
     let img = "";
     for (img of images) {

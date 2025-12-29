@@ -474,11 +474,6 @@ function App() {
               isOpenFullScreenPanel?.model==='Edit Category' && 
               <EditCategory />     
             }
-
-            {
-              isOpenFullScreenPanel?.model==='Edit Category' && 
-              <EditCategory />     
-            }
             
       </Dialog>
 
